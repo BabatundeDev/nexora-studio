@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import ArchiCityHomes from './components/archi-city-homes'
+import NexoraStudio from './components/nexora-studio'
 
 function App() {
   return (
     <>
-      <ArchiCityHomes />
+      <NexoraStudio />
     </>
   )
 }

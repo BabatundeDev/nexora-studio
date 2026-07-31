@@ -1,97 +1,90 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Menu, X, Phone, Mail, MapPin, Clock, ChevronDown, ChevronRight, ArrowRight, ArrowUpRight,
-  Star, Check, Building2, Ruler, PenTool, Layers, ClipboardCheck, TreePine, Users, Award,
-  ShieldCheck, Sparkles, Sun, Moon, MessageCircle, ArrowUp, Quote, Plus, Minus, Compass,
-  Hammer, FileCheck2, Boxes, Landmark, Home as HomeIcon, Building, Warehouse, ChevronUp
+  Star, Check, Ruler, Layers, ClipboardCheck, TreePine, Users, Award,
+  ShieldCheck, Sparkles, MessageCircle, Quote, Plus, Minus, Compass,
+  Hammer, FileCheck2, Boxes, Home as HomeIcon, Building, ChevronUp
 } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 /* ---------------------------------- DATA ---------------------------------- */
 
 const NAV_PAGES = ["home", "about", "services", "projects", "contact"];
 
 const SERVICES = [
-  { icon: Compass, cat: "Architectural Design", title: "Residential Building Design", overview: "Bespoke residential architecture shaped around how a family actually lives, from first sketch to final elevation.", benefits: ["Tailored floor plans", "Climate-responsive orientation", "Timeless material palettes"], timeline: "4 – 8 weeks", deliverables: ["Concept drawings", "Working drawings", "3D exterior renders"] },
-  { icon: Building, cat: "Architectural Design", title: "Commercial Building Design", overview: "Functional, brand-forward commercial architecture engineered for footfall, efficiency, and long-term value.", benefits: ["Optimised floor efficiency", "Regulatory-ready drawings", "Scalable design systems"], timeline: "6 – 12 weeks", deliverables: ["Space programming", "Full architectural set", "Signage & facade study"] },
-  { icon: Sparkles, cat: "Architectural Design", title: "Luxury Home Design", overview: "Statement residences for clients who see a home as an heirloom, not a structure.", benefits: ["Signature architectural identity", "Premium material curation", "Discreet, private planning"], timeline: "8 – 14 weeks", deliverables: ["Master plan", "Interior shell coordination", "Cinematic 3D walkthrough"] },
-  { icon: Hammer, cat: "Architectural Design", title: "Building Renovation", overview: "Reviving existing structures with contemporary sensibility while respecting original character and structural integrity.", benefits: ["Structural condition survey", "Cost-conscious phasing", "Minimal-disruption planning"], timeline: "3 – 10 weeks", deliverables: ["Existing condition report", "Renovation drawings", "Before/after visualisation"] },
-  { icon: Layers, cat: "Interior Design", title: "Interior Design", overview: "Interiors that carry the building's architectural language inward, layer by layer.", benefits: ["Material and lighting schemes", "Custom joinery detailing", "Furniture and fixture sourcing"], timeline: "4 – 9 weeks", deliverables: ["Mood boards", "Interior layout drawings", "Finishes schedule"] },
-  { icon: Ruler, cat: "Interior Design", title: "Space Planning", overview: "Precision spatial strategy that resolves flow, function, and future flexibility before a single wall is built.", benefits: ["Improved circulation", "Zoning for privacy and light", "Future-proofed layouts"], timeline: "2 – 4 weeks", deliverables: ["Zoning diagrams", "Furniture layout plans", "Flow analysis report"] },
-  { icon: Boxes, cat: "Interior Design", title: "3D Visualization", overview: "Photoreal renders and walkthroughs that let clients stand inside a design before it exists.", benefits: ["Design validation pre-construction", "Marketing-ready imagery", "Faster stakeholder approval"], timeline: "1 – 3 weeks", deliverables: ["Exterior & interior renders", "Animated walkthrough", "VR-ready model"] },
-  { icon: ClipboardCheck, cat: "Construction Consultancy", title: "Project Supervision", overview: "On-site technical oversight that keeps craftsmanship faithful to the approved design intent.", benefits: ["Weekly site quality audits", "Contractor accountability", "Design-intent compliance"], timeline: "Ongoing", deliverables: ["Site inspection reports", "Snag lists", "Progress photo logs"] },
-  { icon: FileCheck2, cat: "Construction Consultancy", title: "Project Management", overview: "End-to-end coordination of consultants, contractors, and timelines under one accountable roof.", benefits: ["Single point of accountability", "Budget and schedule control", "Risk mitigation planning"], timeline: "Full project duration", deliverables: ["Master programme", "Cost tracking reports", "Stakeholder updates"] },
-  { icon: Landmark, cat: "Construction Consultancy", title: "Building Approval Documentation", overview: "Navigating statutory approvals with drawing packages built to pass first submission.", benefits: ["Compliance-first drafting", "Faster approval turnaround", "Liaison with authorities"], timeline: "3 – 6 weeks", deliverables: ["Approval drawing set", "Statutory forms", "Authority correspondence"] },
-  { icon: ShieldCheck, cat: "Construction Consultancy", title: "Quantity Survey Coordination", overview: "Rigorous cost planning that keeps ambition and budget in the same conversation.", benefits: ["Accurate bill of quantities", "Value engineering options", "Tender documentation support"], timeline: "2 – 5 weeks", deliverables: ["Bill of quantities", "Cost plan", "Tender comparison report"] },
-  { icon: TreePine, cat: "Property Development Consultancy", title: "Landscape Design", overview: "Grounds and gardens composed as a continuation of the architecture, not an afterthought.", benefits: ["Site-responsive planting plans", "Outdoor living zones", "Sustainable irrigation design"], timeline: "3 – 6 weeks", deliverables: ["Landscape master plan", "Planting schedule", "Hardscape drawings"] },
-  { icon: Building2, cat: "Property Development Consultancy", title: "Property Development Consultancy", overview: "Feasibility and positioning guidance for investors and developers shaping their next asset.", benefits: ["Site feasibility analysis", "Highest-and-best-use studies", "Investor-ready presentations"], timeline: "2 – 4 weeks", deliverables: ["Feasibility report", "Massing studies", "Development brief"] },
+  { icon: Compass, cat: "Architectural Design", title: "Architectural Design", overview: "Concept-driven spatial design for homes, developments, and commercial propositions that balance beauty with performance.", benefits: ["Site-responsive planning", "Elegant massing studies", "Coordinated design narratives"], timeline: "4 – 8 weeks", deliverables: ["Concept sketches", "Design development package", "3D massing studies"] },
+  { icon: HomeIcon, cat: "Residential Design", title: "Residential Design", overview: "Thoughtful homes shaped around everyday routines, natural light, and refined materiality.", benefits: ["Lifestyle-led floor plans", "Indoor-outdoor flow", "Tailored material palettes"], timeline: "4 – 8 weeks", deliverables: ["Residence planning set", "Interior shell coordination", "Visual presentation board"] },
+  { icon: Building, cat: "Commercial Architecture", title: "Commercial Architecture", overview: "Workplaces and mixed-use destinations designed to support operations, identity, and long-term growth.", benefits: ["Operational efficiency", "Brand-led facade concepts", "Flexible planning"], timeline: "6 – 12 weeks", deliverables: ["Space program", "Architectural package", "Facade exploration studies"] },
+  { icon: Layers, cat: "Interior Design", title: "Interior Design", overview: "Refined interiors that bring architectural character into every room with balance and clarity.", benefits: ["Material and lighting concepts", "Custom finish coordination", "Furniture and fixture guidance"], timeline: "4 – 9 weeks", deliverables: ["Interior concept boards", "Layout drawings", "Finish specification set"] },
+  { icon: Hammer, cat: "Renovation & Remodeling", title: "Renovation & Remodeling", overview: "Sensitive transformations that respect existing structure while introducing contemporary comfort and performance.", benefits: ["Feasibility and planning", "Phased execution strategy", "Minimal disruption solutions"], timeline: "3 – 10 weeks", deliverables: ["Existing condition survey", "Renovation drawings", "Visual before/after concepts"] },
+  { icon: Ruler, cat: "Space Planning", title: "Space Planning", overview: "Precise spatial strategies developed to improve movement, usability, and flexibility from day one.", benefits: ["Functional zoning", "Circulation refinement", "Future-ready layouts"], timeline: "2 – 4 weeks", deliverables: ["Zoning diagrams", "Furniture layout plans", "Space optimization report"] },
+  { icon: Boxes, cat: "3D Architectural Visualization", title: "3D Architectural Visualization", overview: "Immersive visual studies that help clients experience the project before construction begins.", benefits: ["Photorealistic renders", "Design validation", "Stakeholder presentation materials"], timeline: "1 – 3 weeks", deliverables: ["Exterior renders", "Interior renders", "Animated walkthroughs"] },
+  { icon: FileCheck2, cat: "Construction Documentation", title: "Construction Documentation", overview: "Detailed documentation designed to support tendering, approvals, and precise on-site execution.", benefits: ["Documentation accuracy", "Code-compliant detailing", "Clear construction coordination"], timeline: "3 – 6 weeks", deliverables: ["Construction drawing set", "Detailing package", "Specification support"] },
+  { icon: ClipboardCheck, cat: "Project Management", title: "Project Management", overview: "Coordinated delivery from concept through handover with clear communication and careful oversight.", benefits: ["Milestone tracking", "Consultant coordination", "Risk-aware scheduling"], timeline: "Full project duration", deliverables: ["Project programme", "Progress reporting", "Handover coordination"] },
+  { icon: ShieldCheck, cat: "Site Supervision", title: "Site Supervision", overview: "On-site presence and quality control that keeps construction aligned with the approved vision.", benefits: ["Regular site audits", "Quality assurance checks", "Detailed snag management"], timeline: "Ongoing", deliverables: ["Inspection reports", "Snag lists", "Progress documentation"] },
 ];
 
 const SERVICE_CATEGORIES = [...new Set(SERVICES.map(s => s.cat))];
 
 const PROJECTS = [
-  { title: "Oranmiyan Residence", cat: "Luxury Homes", location: "Ile Ife, Osun State", desc: "A five-bedroom courtyard residence organised around a central reflecting pool and framed in brushed limestone.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Adejare Villa", cat: "Modern Villas", location: "Ibadan, Oyo State", desc: "A cantilevered villa that steps down a sloped site, opening every living space to cross ventilation.", img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Iremide Business Park", cat: "Commercial Buildings", location: "Lagos, Nigeria", desc: "A nine-storey commercial tower with a perforated brise-soleil facade tuned to Lagos sun angles.", img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Grace Covenant Chapel", cat: "Churches", location: "Ife-Ijesha, Osun State", desc: "A 2,000-seat sanctuary with a soaring laminated-timber roof and clerestory light wells.", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Bright Path Academy", cat: "Schools", location: "Ile Ife, Osun State", desc: "A campus of shaded courtyards and cross-ventilated classroom blocks designed around daylight and airflow.", img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Serene Palms Hotel", cat: "Hotels", location: "Osogbo, Osun State", desc: "A 64-key boutique hotel wrapped around a central garden atrium, with every room facing greenery.", img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Meridian Office Complex", cat: "Office Complexes", location: "Abuja, FCT", desc: "A twin-tower office complex linked by a glazed sky-bridge and shared landscaped podium.", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Heritage House Restoration", cat: "Renovation Projects", location: "Ile Ife, Osun State", desc: "Full structural and facade restoration of a 1960s residence, preserving its original terrazzo and brise-soleil.", img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Ocean Terrace Apartments", cat: "Apartment Buildings", location: "Lekki, Lagos", desc: "A 48-unit apartment building with stepped terraces that give every home a private garden.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Ife Central Quarter", cat: "Mixed Use Developments", location: "Ile Ife, Osun State", desc: "A mixed-use quarter combining ground-floor retail, mid-rise offices, and rooftop residences.", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Horizon Residence", cat: "Luxury Homes", location: "Lagos, Nigeria", desc: "A sculptural coastal home framed by open terraces, private courtyards, and panoramic views.", img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Skyline Business Hub", cat: "Commercial Buildings", location: "Victoria Island, Lagos", desc: "A mixed-use business landmark defined by intelligent facades, flexible work zones, and elevated amenity.", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" },
+  { title: "The Willow Villa", cat: "Modern Villas", location: "Abuja, Nigeria", desc: "An elegant family villa centred around a landscaped courtyard and seamless indoor-outdoor living.", img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Aurora Office Tower", cat: "Office Complexes", location: "Ikoyi, Lagos", desc: "A refined headquarters that balances light, acoustics, and a calm, contemporary corporate identity.", img: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Green Haven Apartments", cat: "Apartment Buildings", location: "Lekki, Lagos", desc: "A residential collection with generous balconies, landscaped pockets, and a measured sense of privacy.", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Crestview Hotel", cat: "Hotels", location: "Abuja, Nigeria", desc: "A boutique hospitality concept where warm materials, curated circulation, and understated luxury meet.", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Harmony Learning Centre", cat: "Schools", location: "Port Harcourt, Nigeria", desc: "A learning environment shaped around adaptability, daylight, and collaborative social spaces.", img: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Nova Retail Plaza", cat: "Retail", location: "Lagos, Nigeria", desc: "A destination retail experience anchored by an airy promenade, signature storefronts, and flexible tenant planning.", img: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80" },
 ];
 
 const PROJECT_CATEGORIES = ["All", ...new Set(PROJECTS.map(p => p.cat))];
 
 const PROCESS_STEPS = [
-  { title: "Consultation", desc: "We listen first — understanding your vision, budget, and how you intend to use the space." },
-  { title: "Site Inspection", desc: "Our team surveys the land, studying orientation, soil, and surrounding context." },
-  { title: "Concept Development", desc: "Initial design directions are sketched and reviewed against your brief." },
-  { title: "Design", desc: "The chosen concept is developed into detailed architectural drawings." },
-  { title: "3D Visualization", desc: "Photoreal renders let you walk through the design before construction begins." },
-  { title: "Approval", desc: "We prepare and submit documentation for statutory building approval." },
-  { title: "Construction", desc: "Our supervisors oversee every phase on site, keeping quality faithful to the design." },
-  { title: "Project Delivery", desc: "A final walkthrough, snag resolution, and handover of your completed space." },
+  { title: "Discovery", desc: "We begin by listening carefully, understanding your goals, and shaping the brief around how you want to live and work." },
+  { title: "Site Study", desc: "Every project is grounded in its context, including orientation, climate, views, and the surrounding urban fabric." },
+  { title: "Concept Design", desc: "Initial ideas are explored through sketches, spatial planning, and a clear design narrative." },
+  { title: "Design Development", desc: "The selected direction evolves into detailed architectural and interior proposals." },
+  { title: "Visualization", desc: "Immersive visuals and 3D representation help you experience the design before it is built." },
+  { title: "Documentation", desc: "We prepare refined drawings and specifications to support approvals, coordination, and execution." },
+  { title: "Construction Oversight", desc: "Our team monitors quality, sequencing, and communication during the build." },
+  { title: "Project Handover", desc: "A thoughtful closeout ensures the finished space is delivered with clarity and confidence." },
 ];
 
 const STATS = [
-  { value: 120, suffix: "+", label: "Projects delivered" },
-  { value: 15, suffix: "+", label: "Years of experience" },
-  { value: 98, suffix: "%", label: "Client satisfaction" },
-  { value: 40, suffix: "+", label: "Team members" },
+  { value: 35, suffix: "+", label: "Concept Projects" },
+  { value: 8, suffix: "", label: "Design Specialists" },
+  { value: 12, suffix: "", label: "Cities Inspired" },
+  { value: 100, suffix: "%", label: "Design Focus" },
 ];
 
 const TESTIMONIALS = [
-  { name: "Adebayo Ogundimu", role: "Property Developer, Lagos", quote: "Archi City Homes turned a difficult sloped site into the most striking villa in the neighbourhood. Every deadline was met.", rating: 5 },
-  { name: "Folasade Adeyemi", role: "Homeowner, Ile Ife", quote: "They listened to how our family actually lives before drawing a single wall. The result feels entirely ours.", rating: 5 },
-  { name: "Pastor Emmanuel Okafor", role: "Grace Covenant Chapel", quote: "From concept to consecration, their team managed every consultant and approval without a single surprise.", rating: 5 },
-  { name: "Chiamaka Nwosu", role: "Hotel Owner, Osogbo", quote: "Transparent communication throughout. We always knew exactly where budget and timeline stood.", rating: 5 },
+  { name: "Daniel Alvarez", role: "Private Residence Client", quote: "Working with Nexora Studio was a seamless experience. Their creative ideas and attention to detail exceeded our expectations.", rating: 5 },
+  { name: "Maya Chen", role: "Commercial Development Partner", quote: "The team translated our vision into a space that feels both refined and practical. Every detail was considered with care.", rating: 5 },
+  { name: "Noah Ibrahim", role: "Hospitality Founder", quote: "From first concept to final delivery, Nexora Studio made the process calm, collaborative, and inspiring.", rating: 5 },
 ];
 
 const WHY_US = [
-  { icon: Sparkles, title: "Modern Designs", desc: "Contemporary architectural language suited to how Nigeria builds and lives today." },
-  { icon: Users, title: "Experienced Architects", desc: "A senior team with over a decade shaping landmark residential and commercial work." },
-  { icon: ShieldCheck, title: "Quality Construction", desc: "Rigorous on-site supervision protects design intent from foundation to finish." },
-  { icon: MessageCircle, title: "Transparent Communication", desc: "Clear reporting and a single point of contact throughout your project." },
-  { icon: Clock, title: "On-Time Delivery", desc: "Disciplined programme management keeps milestones honest." },
-  { icon: Ruler, title: "Attention to Detail", desc: "Every junction, material, and sightline considered before it's built." },
-  { icon: PenTool, title: "Innovative Solutions", desc: "Creative problem-solving for difficult sites, briefs, and budgets." },
-  { icon: TreePine, title: "Sustainable Designs", desc: "Passive cooling, daylight, and material choices suited to our climate." },
+  { icon: Sparkles, title: "Contemporary Design Approach", desc: "Spaces are shaped with a modern architectural language that feels timeless and tailored." },
+  { icon: Users, title: "Client First Process", desc: "Every decision is made with your priorities, lifestyle, and ambitions in mind." },
+  { icon: TreePine, title: "Sustainable Design Principles", desc: "Natural light, efficiency, and durable materials are considered from the very beginning." },
+  { icon: ShieldCheck, title: "Experienced Design Team", desc: "A multidisciplinary studio with a strong track record across residential and commercial projects." },
+  { icon: MessageCircle, title: "Transparent Project Management", desc: "Clear communication keeps budgets, timing, and decision-making aligned at every step." },
+  { icon: Ruler, title: "Attention to Every Detail", desc: "From planning to finishing, the small decisions are handled with care and intention." },
+  { icon: Award, title: "High Quality Deliverables", desc: "Every package is produced to a standard that supports confident approvals and execution." },
+  { icon: Boxes, title: "Modern Technology & 3D Visualization", desc: "Advanced visuals and digital tools bring clarity to complex design concepts." },
 ];
 
-const TRUST_BADGES = ["Licensed Professionals", "Modern Design Solutions", "Quality Construction", "Client Focused", "Project Excellence", "Sustainable Architecture", "Innovative Designs", "Professional Consultancy"];
+const TRUST_BADGES = ["Contemporary Design Vision", "Client Centric Delivery", "Sustainable Architecture", "Premium Project Planning", "Thoughtful Interiors", "Technical Precision", "Collaborative Process", "Design Excellence"];
 
-const PARTNERS = ["Osun State Ministry of Works", "Ife Chamber of Commerce", "Nigerian Institute of Architects", "Federation of Construction Industry", "Council of Registered Builders", "Real Estate Developers Association"];
+const PARTNERS = ["Design Excellence Council", "Future Living Alliance", "Studio Practice Forum", "Urban Design Collective", "Architectural Visualization Network", "Sustainable Spaces Network"];
 
 const FAQS = [
-  { cat: "Architectural Services", q: "What architectural services does Archi City Homes provide?", a: "We provide full architectural design for residential, commercial, and institutional buildings — including luxury homes, renovations, interior design, space planning, and 3D visualisation." },
-  { cat: "Construction Process", q: "Do you manage construction, or only design?", a: "Both. We offer construction consultancy, project supervision, and full project management, so the same team that designs your building can oversee its construction." },
-  { cat: "Project Duration", q: "How long does a typical project take?", a: "A residential design typically takes 4–8 weeks; commercial and luxury projects can take 8–14 weeks. Construction timelines depend on scale and are set during project management." },
-  { cat: "Cost Estimates", q: "How is project cost estimated?", a: "Our quantity survey coordination service produces a detailed bill of quantities and cost plan once your design is finalised, so you have clarity before construction begins." },
-  { cat: "Building Approvals", q: "Do you handle building approval documentation?", a: "Yes. We prepare compliant drawing packages and liaise directly with the relevant authorities to secure approval." },
-  { cat: "Design Revisions", q: "How many design revisions are included?", a: "Every engagement includes structured revision rounds at the concept and design development stages, so your feedback is built in, not billed as an afterthought." },
-  { cat: "Architectural Services", q: "Can you work with an existing building?", a: "Yes — our renovation and space planning services are built around surveying and respecting existing structures before proposing change." },
-  { cat: "Project Duration", q: "Do you take on projects outside Osun State?", a: "Yes, our team has delivered projects across Lagos, Oyo, Abuja, and beyond, from our base in Ile Ife." },
+  { cat: "Architectural Services", q: "What services does Nexora Studio provide?", a: "We deliver architectural design, interior planning, renovations, 3D visualization, construction documentation, project management, and site supervision." },
+  { cat: "Design Process", q: "How does a typical engagement begin?", a: "Every project begins with discovery, site study, and concept development so the brief is grounded in both aspiration and context." },
+  { cat: "Project Duration", q: "How long does a project take?", a: "Timelines vary by scope, but residential concepts are typically developed within a few weeks while larger developments require more detailed planning and coordination." },
+  { cat: "Budget Planning", q: "How is budget guidance handled?", a: "We develop a clear design strategy and documentation package to support realistic planning, informed decisions, and aligned expectations." },
+  { cat: "Design Revisions", q: "How are revisions managed?", a: "Revisions are structured around each design stage so feedback is incorporated thoughtfully rather than at random." },
+  { cat: "Project Delivery", q: "Can Nexora Studio support construction?", a: "Yes. We can provide project management and on-site supervision to keep the build aligned with the approved design intent." },
 ];
 
 /* ------------------------------- HELPERS ---------------------------------- */
@@ -157,11 +150,11 @@ function Logo({ dark }) {
   return (
     <div className="flex items-center gap-2.5 select-none">
       <div className="relative w-9 h-9 flex items-center justify-center" style={{ border: `1px solid #C89B3C` }}>
-        <span style={{ fontFamily: "Poppins, sans-serif", color: "#C89B3C", fontWeight: 700, fontSize: 15 }}>AC</span>
+        <span style={{ fontFamily: "Poppins, sans-serif", color: "#C89B3C", fontWeight: 700, fontSize: 15 }}>NS</span>
       </div>
       <div style={{ fontFamily: "Poppins, sans-serif" }}>
-        <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "0.02em", color: dark ? "#F8FAFC" : "#0F172A", lineHeight: 1.05 }}>ARCHI CITY</div>
-        <div style={{ fontWeight: 400, fontSize: 9.5, letterSpacing: "0.3em", color: "#C89B3C", lineHeight: 1.1 }}>HOMES LTD.</div>
+        <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "0.02em", color: dark ? "#F8FAFC" : "#0F172A", lineHeight: 1.05 }}>NEXORA</div>
+        <div style={{ fontWeight: 400, fontSize: 9.5, letterSpacing: "0.3em", color: "#C89B3C", lineHeight: 1.1 }}>STUDIO</div>
       </div>
     </div>
   );
@@ -202,7 +195,7 @@ function SectionEyebrow({ children, dark }) {
 
 /* ---------------------------------- NAV ------------------------------------ */
 
-function Nav({ page, setPage, dark, setDark, scrolled }) {
+function Nav({ page, setPage, dark, scrolled }) {
   const [open, setOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
 
@@ -236,9 +229,6 @@ function Nav({ page, setPage, dark, setDark, scrolled }) {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <button onClick={() => setDark(!dark)} aria-label="Toggle dark mode" className="p-2 rounded-full transition-colors" style={{ color: txt, border: `1px solid ${txt === "#F8FAFC" ? "rgba(248,250,252,0.3)" : "rgba(15,23,42,0.2)"}` }}>
-            {dark ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
           <GoldButton onClick={() => go("contact")}>Book a Consultation</GoldButton>
         </div>
 
@@ -265,7 +255,7 @@ function Hero({ setPage, dark }) {
 
   return (
     <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden" style={{ background: "#0F172A" }}>
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-all duration-[2500ms]" style={{ opacity: drawn ? 0.42 : 0, transform: drawn ? "scale(1)" : "scale(1.08)" }} />
+      <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=2000&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-all duration-[2500ms]" style={{ opacity: drawn ? 0.42 : 0, transform: drawn ? "scale(1)" : "scale(1.08)" }} />
       <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0.35) 45%, rgba(15,23,42,0.94) 100%)" }} />
 
       {/* signature: blueprint elevation line-drawing */}
@@ -290,23 +280,23 @@ function Hero({ setPage, dark }) {
         <Reveal>
           <div className="flex items-center gap-3 mb-7">
             <span style={{ width: 40, height: 1, background: "#C89B3C" }} />
-            <span style={{ fontFamily: "Poppins, sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.3em", color: "#C89B3C" }}>ARCHITECTURE · CONSTRUCTION · ILE IFE, NIGERIA</span>
+            <span style={{ fontFamily: "Poppins, sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.3em", color: "#C89B3C" }}>ARCHITECTURE · INTERIOR DESIGN · CONSTRUCTION CONSULTANCY</span>
           </div>
         </Reveal>
         <Reveal delay={100}>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC", letterSpacing: "-0.01em" }} className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.06] max-w-4xl">
-            Designing Landmark Spaces That Inspire Living
+            Designing Spaces That Inspire Tomorrow
           </h1>
         </Reveal>
         <Reveal delay={220}>
           <p className="mt-7 max-w-xl text-base lg:text-lg" style={{ fontFamily: "Inter, sans-serif", color: "#CBD5E1", lineHeight: 1.7 }}>
-            Archi City Homes Ltd. delivers innovative architectural design, construction planning, interior solutions, and project management for residential and commercial developments across Nigeria.
+            From modern homes to commercial developments, Nexora Studio delivers architectural solutions that combine creativity, functionality, and timeless design.
           </p>
         </Reveal>
         <Reveal delay={340}>
           <div className="mt-10 flex flex-wrap gap-4">
-            <GoldButton onClick={() => setPage("contact")}>Book a Consultation</GoldButton>
-            <GhostButton onClick={() => setPage("projects")} dark>View Our Projects</GhostButton>
+            <GoldButton onClick={() => setPage("projects")}>Explore Projects</GoldButton>
+            <GhostButton onClick={() => setPage("contact")} dark>Book a Consultation</GhostButton>
           </div>
         </Reveal>
       </div>
@@ -327,23 +317,23 @@ function AboutPreview({ dark, setPage }) {
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
         <Reveal className="relative">
           <div className="relative">
-            <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1000&q=80" alt="Archi City Homes studio" className="w-full h-[420px] object-cover" />
+            <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80" alt="Nexora Studio studio" className="w-full h-[420px] object-cover" />
             <div className="absolute -bottom-8 -right-8 hidden sm:block p-6" style={{ background: "#C89B3C", maxWidth: 220 }}>
-              <div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 32, color: "#0F172A" }}>15+</div>
-              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#0F172A" }}>Years designing landmark Nigerian spaces</div>
+              <div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 32, color: "#0F172A" }}>35+</div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#0F172A" }}>Concept-led spaces shaped across modern cities</div>
             </div>
           </div>
         </Reveal>
         <Reveal delay={120}>
           <SectionEyebrow dark={dark}>WHO WE ARE</SectionEyebrow>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl lg:text-[2.6rem] leading-tight mb-6">
-            A design studio and construction consultancy built on precision
+            A fictional architecture studio built for modern living
           </h2>
           <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.8 }} className="mb-8">
-            From our studio at Oranmiyan Tower in Ile Ife, we design and deliver residences, commercial buildings, and institutions across Nigeria — carrying every project from first sketch through final handover with one accountable team.
+            Nexora Studio is a fictional architecture and design practice created as a portfolio concept to showcase premium architectural design, interior planning, and construction consultancy. The studio focuses on creating functional, elegant, and sustainable spaces for residential, commercial, and mixed-use developments.
           </p>
           <div className="grid grid-cols-2 gap-6 mb-9">
-            {["Licensed architectural team", "Full construction consultancy", "In-house 3D visualisation", "Transparent project reporting"].map((t) => (
+            {["Design excellence", "Interior-led planning", "3D architectural visualization", "Transparent project delivery"].map((t) => (
               <div key={t} className="flex items-start gap-3">
                 <Check size={16} style={{ color: "#C89B3C", marginTop: 3, flexShrink: 0 }} />
                 <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#CBD5E1" : "#334155" }}>{t}</span>
@@ -427,7 +417,7 @@ function FeaturedProjects({ dark, setPage }) {
           <div>
             <SectionEyebrow dark={dark}>SELECTED WORK</SectionEyebrow>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl lg:text-[2.6rem] leading-tight max-w-xl">
-              A portfolio of landmark spaces
+              A portfolio of contemporary spaces
             </h2>
           </div>
           <GhostButton onClick={() => setPage("projects")} dark={dark}>All Projects</GhostButton>
@@ -556,8 +546,8 @@ function CallToAction({ setPage }) {
             Book a consultation with our design team and bring your vision to a licensed architect's table.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <GoldButton onClick={() => setPage("contact")}>Book a Consultation</GoldButton>
-            <GhostButton onClick={() => setPage("projects")} dark>View Our Projects</GhostButton>
+            <GoldButton onClick={() => setPage("projects")}>Explore Projects</GoldButton>
+            <GhostButton onClick={() => setPage("contact")} dark>Book a Consultation</GhostButton>
           </div>
         </Reveal>
       </div>
@@ -578,7 +568,7 @@ function Footer({ dark, setPage }) {
           </p>
         </div>
         <div>
-          <h4 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#F8FAFC" }} className="text-sm mb-5 tracking-wide">NAVIGATE</h4>
+          <h4 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#F8FAFC" }} className="text-sm mb-5 tracking-wide">QUICK LINKS</h4>
           <div className="flex flex-col gap-3">
             {NAV_PAGES.map((p) => <button key={p} onClick={() => { setPage(p); window.scrollTo(0, 0); }} className="text-left capitalize hover:text-[#C89B3C] transition-colors" style={{ fontFamily: "Inter, sans-serif", fontSize: 13.5, color: "#94A3B8" }}>{p}</button>)}
           </div>
@@ -592,15 +582,16 @@ function Footer({ dark, setPage }) {
         <div>
           <h4 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#F8FAFC" }} className="text-sm mb-5 tracking-wide">CONTACT</h4>
           <div className="flex flex-col gap-3.5" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#94A3B8" }}>
-            <div className="flex gap-2.5"><MapPin size={15} className="mt-0.5 flex-shrink-0" style={{ color: "#C89B3C" }} /><span>Oranmiyan Tower, Lagere Road, Ile Ife 220221, Osun State, Nigeria</span></div>
-            <div className="flex gap-2.5"><Phone size={15} className="flex-shrink-0" style={{ color: "#C89B3C" }} /><span>0703 375 0709</span></div>
-            <div className="flex gap-2.5"><Clock size={15} className="mt-0.5 flex-shrink-0" style={{ color: "#C89B3C" }} /><span>Mon – Fri, 8:00 AM – 5:00 PM</span></div>
+            <div className="flex gap-2.5"><MapPin size={15} className="mt-0.5 flex-shrink-0" style={{ color: "#C89B3C" }} /><span>Innovation District, Victoria Island, Lagos, Nigeria</span></div>
+            <div className="flex gap-2.5"><Phone size={15} className="flex-shrink-0" style={{ color: "#C89B3C" }} /><span>+234 800 000 0000</span></div>
+            <div className="flex gap-2.5"><Clock size={15} className="mt-0.5 flex-shrink-0" style={{ color: "#C89B3C" }} /><span>Monday – Friday, 9:00 AM – 6:00 PM</span></div>
           </div>
         </div>
       </div>
       <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row justify-between items-center gap-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#475569" }}>© {new Date().getFullYear()} Archi City Homes Ltd. All rights reserved.</span>
-        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#475569" }}>Architecture · Construction · Interior Design · Ile Ife, Nigeria</span>
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#475569" }}>© {new Date().getFullYear()} Nexora Studio. Concept Project. All rights reserved.</span>
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#475569" }}>Architecture · Interior Design · Construction Consultancy · Lagos, Nigeria</span>
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#475569", display: "block", textAlign: "center", marginTop: 6 }}>Nexora Studio is a fictional architecture brand created exclusively to demonstrate frontend development, UI/UX design, and responsive web development skills.</span>
       </div>
     </footer>
   );
@@ -617,16 +608,16 @@ function Floating({ dark }) {
   }, []);
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 items-end">
-      {showTop && (
+      {/* {showTop && (
         <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="w-11 h-11 flex items-center justify-center transition-transform hover:-translate-y-1" style={{ background: dark ? "#1E293B" : "#0F172A", color: "#F8FAFC", borderRadius: "50%" }} aria-label="Back to top">
           <ChevronUp size={18} />
         </button>
-      )}
-      <a href="tel:+2347033750709" className="w-12 h-12 flex items-center justify-center transition-transform hover:-translate-y-1" style={{ background: "#0F172A", color: "#F8FAFC", borderRadius: "50%" }} aria-label="Call us">
+      )} */}
+      {/* <a href="tel:+2348000000000" className="w-12 h-12 flex items-center justify-center transition-transform hover:-translate-y-1" style={{ background: "#0F172A", color: "#F8FAFC", borderRadius: "50%" }} aria-label="Call us">
         <Phone size={18} />
-      </a>
-      <a href="https://wa.me/2347033750709" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center transition-transform hover:-translate-y-1" style={{ background: "#25D366", color: "#fff", borderRadius: "50%" }} aria-label="WhatsApp us">
-        <MessageCircle size={19} />
+      </a> */}
+      <a href="https://wa.me/2348000000000" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center transition-transform hover:-translate-y-1" style={{ background: "#25D366", color: "#fff", borderRadius: "50%" }} aria-label="WhatsApp us">
+        <FaWhatsapp size={24} />
       </a>
     </div>
   );
@@ -636,10 +627,12 @@ function Floating({ dark }) {
 
 function AboutPage({ dark }) {
   const values = [
-    { title: "Integrity", desc: "We design and quote honestly, with no hidden costs or shifting scope." },
-    { title: "Craftsmanship", desc: "Every drawing and detail is executed to a standard we'd put our name on." },
-    { title: "Client Partnership", desc: "You are involved at every decision point, not just the first and last." },
-    { title: "Innovation", desc: "We bring contemporary technique to Nigerian climate, culture, and context." },
+    { title: "Design Excellence", desc: "Every concept is developed with clarity, proportion, and a strong spatial narrative." },
+    { title: "Innovation", desc: "Modern tools and forward-thinking design strategies keep each project fresh and future-ready." },
+    { title: "Sustainability", desc: "Environmental awareness is embedded in material choices, planning, and long-term performance." },
+    { title: "Integrity", desc: "Honest communication and disciplined delivery underpin everything we create." },
+    { title: "Collaboration", desc: "We bring together clients, consultants, and ideas in a shared design process." },
+    { title: "Quality Craftsmanship", desc: "Precision and detail are treated as essential parts of the architectural experience." },
   ];
   const team = [
     { name: "Arc. Oluwaseun Adewale", role: "Principal Architect", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" },
@@ -653,7 +646,7 @@ function AboutPage({ dark }) {
         <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover opacity-35" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.96) 100%)" }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-16 w-full">
-          <SectionEyebrow dark>ABOUT ARCHI CITY HOMES</SectionEyebrow>
+          <SectionEyebrow dark>ABOUT NEXORA STUDIO</SectionEyebrow>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC" }} className="text-4xl lg:text-6xl">Our Story</h1>
         </div>
       </section>
@@ -662,10 +655,10 @@ function AboutPage({ dark }) {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.9 }} className="text-lg mb-6">
-              Archi City Homes Ltd. began in Ile Ife with a simple conviction: that Nigerian architecture deserves the same rigour, ambition, and craftsmanship celebrated on the world's biggest stages. What started as a small design practice has grown into a full architecture, construction, and interior consultancy trusted by homeowners, developers, and institutions across the country.
+              Nexora Studio is a fictional architecture and design practice created as a portfolio concept to showcase premium architectural design, interior planning, and construction consultancy.
             </p>
             <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.9 }} className="text-lg">
-              Today, our team carries every project — from luxury residences to schools, churches, and commercial towers — from first sketch through final handover, holding ourselves accountable to the same standard at every stage.
+              The studio focuses on creating functional, elegant, and sustainable spaces for residential, commercial, and mixed-use developments. Driven by creativity and precision, Nexora Studio blends modern architecture with practical solutions to deliver timeless environments that elevate everyday living and business experiences.
             </p>
           </Reveal>
         </div>
@@ -709,7 +702,7 @@ function AboutPage({ dark }) {
       <section className="py-24 px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
           <Reveal className="max-w-2xl mb-14"><SectionEyebrow dark={dark}>MEET OUR TEAM</SectionEyebrow>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl lg:text-4xl leading-tight">The people behind every drawing</h2>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl lg:text-4xl leading-tight">The creative minds behind every concept</h2>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((m, i) => (
@@ -733,14 +726,14 @@ function AboutPage({ dark }) {
             <div style={{ background: dark ? "#0B1220" : "#FFFFFF", border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(15,23,42,0.07)"}` }} className="p-10 h-full">
               <ShieldCheck size={30} style={{ color: "#C89B3C" }} strokeWidth={1.5} />
               <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-2xl mt-5 mb-3">Commitment to Quality</h3>
-              <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.8 }}>Every project is supervised against our own internal quality benchmarks, not just statutory minimums — because our name stays on the building long after handover.</p>
+              <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.8 }}>Every project is shaped with a rigorous design process and a commitment to lasting quality from concept through completion.</p>
             </div>
           </Reveal>
           <Reveal delay={100}>
             <div style={{ background: dark ? "#0B1220" : "#FFFFFF", border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(15,23,42,0.07)"}` }} className="p-10 h-full">
               <TreePine size={30} style={{ color: "#C89B3C" }} strokeWidth={1.5} />
               <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-2xl mt-5 mb-3">Innovation & Sustainability</h3>
-              <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.8 }}>Passive cooling, daylight modelling, and locally sourced materials are considered from concept stage, not bolted on afterward.</p>
+              <p style={{ fontFamily: "Inter, sans-serif", color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.8 }}>Sustainable design thinking, careful detailing, and spatial intelligence are woven into each concept from the earliest sketches.</p>
             </div>
           </Reveal>
         </div>
@@ -762,7 +755,7 @@ function ServicesPage({ dark }) {
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.96) 100%)" }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
           <SectionEyebrow dark>OUR SERVICES</SectionEyebrow>
-          <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC" }} className="text-4xl lg:text-6xl">Every stage, under one roof</h1>
+          <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC" }} className="text-4xl lg:text-6xl">Design services for every stage of the journey</h1>
         </div>
       </section>
 
@@ -819,7 +812,7 @@ function ServicesPage({ dark }) {
 function CallToActionInline({ dark }) {
   return (
     <section className="py-20 px-6 lg:px-10 text-center" style={{ background: dark ? "#0F172A" : "#F8FAFC" }}>
-      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-2xl lg:text-3xl mb-6">Not sure which service fits your project?</h3>
+      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-2xl lg:text-3xl mb-6">Not sure which service fits your next project?</h3>
       <GoldButton onClick={() => window.scrollTo(0, 0)}>Talk To Our Team</GoldButton>
     </section>
   );
@@ -837,7 +830,7 @@ function ProjectsPage({ dark }) {
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.96) 100%)" }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
           <SectionEyebrow dark>OUR PORTFOLIO</SectionEyebrow>
-          <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC" }} className="text-4xl lg:text-6xl">Landmark spaces, delivered</h1>
+          <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#F8FAFC" }} className="text-4xl lg:text-6xl">Spaces shaped for modern living</h1>
         </div>
       </section>
 
@@ -872,12 +865,12 @@ function BeforeAfter({ dark }) {
       <div className="max-w-5xl mx-auto">
         <Reveal className="max-w-xl mb-12">
           <SectionEyebrow dark={dark}>RENOVATION SPOTLIGHT</SectionEyebrow>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl leading-tight">Heritage House Restoration — drag to compare</h2>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-3xl leading-tight">The Willow Villa — drag to compare</h2>
         </Reveal>
         <div className="relative h-[420px] select-none" style={{ touchAction: "none" }}>
-          <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80" alt="After renovation" className="absolute inset-0 w-full h-full object-cover" />
+          <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80" alt="After renovation" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-            <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80" alt="Before renovation" className="h-full object-cover" style={{ width: "420px", maxWidth: "none" }} />
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Before renovation" className="h-full object-cover" style={{ width: "420px", maxWidth: "none" }} />
           </div>
           <div className="absolute top-0 bottom-0" style={{ left: `${pos}%`, width: 2, background: "#C89B3C", transform: "translateX(-1px)" }} />
           <div className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center" style={{ left: `${pos}%`, transform: "translate(-50%,-50%)", width: 40, height: 40, borderRadius: "50%", background: "#C89B3C" }}>
@@ -922,17 +915,23 @@ function ContactPage({ dark }) {
             <Reveal>
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: dark ? "#F8FAFC" : "#0F172A" }} className="text-2xl mb-8">Visit or reach us</h2>
               <div className="flex flex-col gap-7 mb-10">
-                <div className="flex gap-4"><MapPin size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Address</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.7 }}>Oranmiyan Tower, Lagere Road, Ile Ife 220221, Osun State, Nigeria</p></div></div>
-                <div className="flex gap-4"><Phone size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Phone</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>0703 375 0709</p></div></div>
-                <div className="flex gap-4"><Clock size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Business Hours</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>Monday – Friday, 8:00 AM – 5:00 PM</p></div></div>
-                <div className="flex gap-4"><Mail size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Email</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>info@archicityhomes.com</p></div></div>
+                <div className="flex gap-4"><MapPin size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Address</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B", lineHeight: 1.7 }}>Innovation District, Victoria Island, Lagos, Nigeria</p></div></div>
+                <div className="flex gap-4"><Phone size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Phone</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>+234 800 000 0000</p></div></div>
+                <div className="flex gap-4"><Clock size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Business Hours</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>Monday – Friday, 9:00 AM – 6:00 PM</p></div></div>
+                <div className="flex gap-4"><Mail size={20} style={{ color: "#C89B3C" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, color: dark ? "#F8FAFC" : "#0F172A" }} className="mb-1">Email</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#94A3B8" : "#64748B" }}>hello@nexorastudio.design</p></div></div>
               </div>
-              <a href="https://wa.me/2347033750709" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 px-6 py-3 text-sm mb-8" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, background: "#25D366", color: "#fff" }}><MessageCircle size={16} /> Chat on WhatsApp</a>
-              <div className="h-64 flex items-center justify-center" style={{ background: dark ? "#0F172A" : "#F8FAFC", border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.08)"}` }}>
-                <div className="text-center px-6">
-                  <MapPin size={26} style={{ color: "#C89B3C" }} className="mx-auto mb-2" />
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: dark ? "#94A3B8" : "#64748B" }}>Google Maps — Plus Code FGPW+WH Ife</p>
-                </div>
+              <a href="https://wa.me/2348000000000" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 px-6 py-3 text-sm mb-8" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, background: "#25D366", color: "#fff" }}><MessageCircle size={16} /> Chat on WhatsApp</a>
+              <div className="w-full h-64 overflow-hidden" style={{ background: dark ? "#0F172A" : "#F8FAFC", border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.08)"}` }}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1014756.9317317619!2d2.8772983577518967!3d6.535035912837754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf2bae227550d%3A0xe771ad7f1bbe89d6!2sLagos!5e0!3m2!1sen!2sng!4v1785157340701!5m2!1sen!2sng"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="Nexora Studio Lagos location"
+                />
               </div>
             </Reveal>
           </div>
@@ -1002,7 +1001,7 @@ function ContactPage({ dark }) {
 
 export default function App() {
   const [page, setPage] = useState("home");
-  const [dark, setDark] = useState(false);
+  const dark = false;
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -1017,6 +1016,7 @@ export default function App() {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        button, a, [role="button"] { cursor: pointer; }
         select { appearance: none; }
         input, select, textarea { border-radius: 0; }
         input:focus, select:focus, textarea:focus { border-color: #C89B3C !important; }
@@ -1024,7 +1024,7 @@ export default function App() {
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
       `}</style>
 
-      <Nav page={page} setPage={setPage} dark={dark} setDark={setDark} scrolled={scrolled} />
+      <Nav page={page} setPage={setPage} dark={dark} scrolled={scrolled} />
 
       {page === "home" && (
         <>
