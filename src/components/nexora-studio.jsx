@@ -8,7 +8,6 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 
 /* ---------------------------------- DATA ---------------------------------- */
-/* Nexora redesign: white, ivory, charcoal and warm copper. No navy or blue. */
 
 const NAV_PAGES = ["home", "about", "services", "projects", "contact"];
 
@@ -88,6 +87,40 @@ const FAQS = [
   { cat: "Project Delivery", q: "Can Nexora Studio support construction?", a: "Yes. We can provide project management and on-site supervision to keep the build aligned with the approved design intent." },
 ];
 
+/* HERO BLUEPRINT DATA */
+
+const BLUEPRINT_STRUCTURE = [
+  "M0,520 L1200,520",
+  "M120,520 V360 H260 V520",
+  "M260,520 V260 H470 V520",
+  "M470,520 V120 H700 V520",
+  "M700,520 V300 H900 V520",
+  "M900,520 V400 H1060 V520",
+  "M440,200 H730",
+];
+
+const BLUEPRINT_DETAILS = [
+  "M470,200 H700", "M470,280 H700", "M470,360 H700", "M470,440 H700",
+  "M527,120 V520", "M585,120 V520", "M642,120 V520",
+  "M260,340 H470", "M260,420 H470", "M330,260 V520", "M400,260 V520",
+  "M700,380 H900", "M700,460 H900", "M767,300 V520", "M833,300 V520",
+  "M900,460 H1060", "M953,400 V520", "M1007,400 V520",
+  "M120,440 H260", "M190,360 V520",
+];
+
+const BLUEPRINT_DIMENSIONS = [
+  "M120,560 H1060",
+  "M116,564 L124,556", "M256,564 L264,556", "M466,564 L474,556",
+  "M696,564 L704,556", "M896,564 L904,556", "M1056,564 L1064,556",
+  "M1120,120 V520",
+  "M1114,524 L1126,516", "M1114,124 L1126,116",
+];
+
+const BLUEPRINT_AXES = [
+  { x: 120, label: "A" }, { x: 260, label: "B" }, { x: 470, label: "C" },
+  { x: 700, label: "D" }, { x: 900, label: "E" }, { x: 1060, label: "F" },
+];
+
 /* ------------------------------- HELPERS ---------------------------------- */
 
 function useReveal() {
@@ -134,7 +167,7 @@ function Counter({ value, suffix }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
-/* Corner registration marks — the recurring blueprint motif */
+/* DRAFT MARKS */
 function DraftMarks({ dark }) {
   const c = dark ? "rgba(200,155,60,0.55)" : "rgba(200,155,60,0.65)";
   return (
@@ -250,56 +283,67 @@ function Nav({ page, setPage, dark, scrolled }) {
 
 /* --------------------------------- HERO ------------------------------------ */
 
-function Hero({ setPage, dark }) {
-  const [drawn, setDrawn] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setDrawn(true), 300); return () => clearTimeout(t); }, []);
+function BlueprintLines({ lines, start, width }) {
+  return lines.map((d, i) => (
+    <path key={d} d={d} pathLength="1" strokeWidth={width} className="nx-draw" style={{ "--i": start + i }} />
+  ));
+}
+
+function HeroBlueprint() {
+  const detailsStart = BLUEPRINT_STRUCTURE.length;
+  const dimensionsStart = detailsStart + BLUEPRINT_DETAILS.length;
 
   return (
-    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden" style={{ background: "#171717" }}>
-      <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=2000&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-all duration-[2500ms]" style={{ opacity: 1, transform: "scale(1)" }} />
-      
-
-      {/* signature: blueprint elevation line-drawing */}
-      <svg viewBox="0 0 900 420" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" style={{ opacity: drawn ? 0.28 : 0.9, transition: "opacity 1.8s ease 1.6s" }}>
-        <g fill="none" stroke="#B56A35" strokeWidth="1.1">
-          {[
-            "M60,380 L60,180 L160,180 L160,380",
-            "M160,380 L160,120 L340,120 L340,380",
-            "M340,380 L340,60 L520,60 L520,380",
-            "M520,380 L520,150 L680,150 L680,380",
-            "M680,380 L680,220 L820,220 L820,380",
-            "M60,180 L820,180", "M60,240 L820,240", "M60,300 L820,300",
-            "M180,150 L180,380 M220,150 L220,380 M260,150 L260,380",
-          ].map((d, i) => (
-            <path key={i} d={d}
-              style={{ strokeDasharray: 1400, strokeDashoffset: drawn ? 0 : 1400, transition: `stroke-dashoffset 2.2s cubic-bezier(.16,.84,.44,1) ${i * 90}ms` }} />
+    <svg viewBox="0 0 1200 600" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.35))" }}>
+      <g fill="none" stroke="#B56A35" strokeLinecap="square" strokeLinejoin="miter" opacity="0.95">
+        <g className="nx-fade" strokeWidth="1.2" strokeDasharray="6 8" style={{ "--d": "0.4s" }}>
+          {BLUEPRINT_AXES.map((a) => <path key={a.label} d={`M${a.x},50 V590`} />)}
+        </g>
+        <g className="nx-fade" strokeWidth="1.6" style={{ "--d": "0.8s" }}>
+          {BLUEPRINT_AXES.map((a) => (
+            <g key={a.label}>
+              <circle cx={a.x} cy="36" r="13" />
+              <text x={a.x} y="41" textAnchor="middle" fill="#B56A35" stroke="none" fontSize="13" fontWeight="700" fontFamily="DM Sans, sans-serif">{a.label}</text>
+            </g>
           ))}
         </g>
-      </svg>
+        <BlueprintLines lines={BLUEPRINT_STRUCTURE} start={0} width={3.2} />
+        <BlueprintLines lines={BLUEPRINT_DETAILS} start={detailsStart} width={1.6} />
+        <BlueprintLines lines={BLUEPRINT_DIMENSIONS} start={dimensionsStart} width={1.8} />
+      </g>
+    </svg>
+  );
+}
+
+function Hero({ setPage }) {
+  return (
+    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=2000&q=80"
+        alt=""
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      <HeroBlueprint />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-24 lg:pb-32 w-full">
-        <Reveal>
-          <div className="flex items-center gap-3 mb-7">
-            <span style={{ width: 40, height: 1, background: "#B56A35" }} />
-            <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.3em", color: "#B56A35" }}>ARCHITECTURE · INTERIOR DESIGN · CONSTRUCTION CONSULTANCY</span>
-          </div>
-        </Reveal>
-        <Reveal delay={100}>
-          <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.01em" }} className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.06] max-w-4xl">
-            Designing Spaces That Inspire Tomorrow
-          </h1>
-        </Reveal>
-        <Reveal delay={220}>
-          <p className="mt-7 max-w-xl text-base lg:text-lg" style={{ fontFamily: "Inter, sans-serif", color: "#A3A3A3", lineHeight: 1.7 }}>
-            From modern homes to commercial developments, Nexora Studio delivers architectural solutions that combine creativity, functionality, and timeless design.
-          </p>
-        </Reveal>
-        <Reveal delay={340}>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <GoldButton onClick={() => setPage("projects")}>Explore Projects</GoldButton>
-            <GhostButton onClick={() => setPage("contact")} dark>Book a Consultation</GhostButton>
-          </div>
-        </Reveal>
+        <div className="nx-rise flex items-center gap-3 mb-7" style={{ "--d": "0s" }}>
+          <span style={{ width: 40, height: 1, background: "#B56A35" }} />
+          <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.3em", color: "#B56A35" }}>ARCHITECTURE · INTERIOR DESIGN · CONSTRUCTION CONSULTANCY</span>
+        </div>
+        <h1 className="nx-rise text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.06] max-w-4xl" style={{ "--d": "0.08s", fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
+          Designing Spaces That Inspire Tomorrow
+        </h1>
+        <p className="nx-rise mt-7 max-w-xl text-base lg:text-lg" style={{ "--d": "0.16s", fontFamily: "Inter, sans-serif", color: "#E5E5E5", lineHeight: 1.7 }}>
+          From modern homes to commercial developments, Nexora Studio delivers architectural solutions that combine creativity, functionality, and timeless design.
+        </p>
+        <div className="nx-rise mt-10 flex flex-wrap gap-4" style={{ "--d": "0.24s" }}>
+          <GoldButton onClick={() => setPage("projects")}>Explore Projects</GoldButton>
+          <GhostButton onClick={() => setPage("contact")} dark>Book a Consultation</GhostButton>
+        </div>
       </div>
 
       <div className="absolute bottom-8 right-8 hidden md:flex flex-col items-center gap-2 z-10" style={{ color: "rgba(248,250,252,0.5)" }}>
@@ -536,7 +580,7 @@ function CallToAction({ setPage }) {
   return (
     <section className="relative py-28 px-6 lg:px-10 overflow-hidden" style={{ background: "#171717" }}>
       <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-      
+
       <div className="relative max-w-4xl mx-auto text-center">
         <Reveal>
           <h2 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-3xl lg:text-[2.6rem] leading-tight mb-6">
@@ -644,7 +688,7 @@ function AboutPage({ dark }) {
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
       <section className="relative h-[52vh] min-h-[420px] flex items-end" style={{ background: "#171717" }}>
         <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-16 w-full">
           <SectionEyebrow dark>ABOUT NEXORA STUDIO</SectionEyebrow>
           <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Our Story</h1>
@@ -752,7 +796,7 @@ function ServicesPage({ dark }) {
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
       <section className="relative h-[46vh] min-h-[360px] flex items-end" style={{ background: "#171717" }}>
         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
           <SectionEyebrow dark>OUR SERVICES</SectionEyebrow>
           <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Design services for every stage of the journey</h1>
@@ -827,7 +871,7 @@ function ProjectsPage({ dark }) {
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
       <section className="relative h-[46vh] min-h-[360px] flex items-end" style={{ background: "#171717" }}>
         <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
           <SectionEyebrow dark>OUR PORTFOLIO</SectionEyebrow>
           <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Spaces shaped for modern living</h1>
@@ -902,7 +946,7 @@ function ContactPage({ dark }) {
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
       <section className="relative h-[42vh] min-h-[320px] flex items-end" style={{ background: "#171717" }}>
         <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
           <SectionEyebrow dark>GET IN TOUCH</SectionEyebrow>
           <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Let's design what's next</h1>
@@ -1029,6 +1073,14 @@ export default function App() {
         ::-webkit-scrollbar { width: 9px; }
         ::-webkit-scrollbar-track { background: #F7F6F2; }
         ::-webkit-scrollbar-thumb { background: #B56A35; border-radius: 999px; }
+
+        .nx-rise { animation: nx-rise 0.7s cubic-bezier(.16,.84,.44,1) var(--d, 0s) backwards; }
+        .nx-fade { animation: nx-fade 1.4s ease var(--d, 0s) backwards; }
+        .nx-draw { stroke-dasharray: 1; animation: nx-draw 7s cubic-bezier(.4,0,.2,1) calc(var(--i) * 0.35s + 0.4s) backwards; }
+        @keyframes nx-rise { from { opacity: 0; transform: translateY(16px); } }
+        @keyframes nx-fade { from { opacity: 0; } }
+        @keyframes nx-draw { from { stroke-dashoffset: 1; } }
+
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
       `}</style>
 
@@ -1036,7 +1088,7 @@ export default function App() {
 
       {page === "home" && (
         <>
-          <Hero setPage={setPage} dark={dark} />
+          <Hero setPage={setPage} />
           <AboutPreview dark={dark} setPage={setPage} />
           <FeaturedServices dark={dark} setPage={setPage} />
           <WhyChooseUs dark={dark} />
