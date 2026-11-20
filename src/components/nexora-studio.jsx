@@ -26,15 +26,30 @@ const SERVICES = [
 
 const SERVICE_CATEGORIES = [...new Set(SERVICES.map(s => s.cat))];
 
+/* IMAGE LIBRARY */
+
+const U = (id, w = 1800) => `https://unsplash.com/photos/${id}/download?force=true&w=${w}`;
+
+const HOME_HERO = U("NliDSNubTag", 2400);
+
+const PAGE_HEROES = {
+  about: U("a8Slhd4Kvxw"),
+  services: U("2HIFbbo8LLw"),
+  projects: U("1lFIgkExOxw"),
+  contact: U("Xs0Run-Z5aw"),
+};
+
+const PRELOAD_IMAGES = [HOME_HERO, ...Object.values(PAGE_HEROES)];
+
 const PROJECTS = [
-  { title: "Horizon Residence", cat: "Luxury Homes", location: "Lagos, Nigeria", desc: "A sculptural coastal home framed by open terraces, private courtyards, and panoramic views.", img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Skyline Business Hub", cat: "Commercial Buildings", location: "Victoria Island, Lagos", desc: "A mixed-use business landmark defined by intelligent facades, flexible work zones, and elevated amenity.", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" },
-  { title: "The Willow Villa", cat: "Modern Villas", location: "Abuja, Nigeria", desc: "An elegant family villa centred around a landscaped courtyard and seamless indoor-outdoor living.", img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Aurora Office Tower", cat: "Office Complexes", location: "Ikoyi, Lagos", desc: "A refined headquarters that balances light, acoustics, and a calm, contemporary corporate identity.", img: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Green Haven Apartments", cat: "Apartment Buildings", location: "Lekki, Lagos", desc: "A residential collection with generous balconies, landscaped pockets, and a measured sense of privacy.", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Crestview Hotel", cat: "Hotels", location: "Abuja, Nigeria", desc: "A boutique hospitality concept where warm materials, curated circulation, and understated luxury meet.", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Harmony Learning Centre", cat: "Schools", location: "Port Harcourt, Nigeria", desc: "A learning environment shaped around adaptability, daylight, and collaborative social spaces.", img: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Nova Retail Plaza", cat: "Retail", location: "Lagos, Nigeria", desc: "A destination retail experience anchored by an airy promenade, signature storefronts, and flexible tenant planning.", img: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80" },
+  { title: "Horizon Residence", cat: "Luxury Homes", location: "Lagos, Nigeria", desc: "A sculptural coastal home framed by open terraces, private courtyards, and panoramic views.", img: U("hHz4yrvxwlA", 1400) },
+  { title: "Skyline Business Hub", cat: "Commercial Buildings", location: "Victoria Island, Lagos", desc: "A mixed-use business landmark defined by intelligent facades, flexible work zones, and elevated amenity.", img: U("LdzsHY_6In4", 1400) },
+  { title: "The Willow Villa", cat: "Modern Villas", location: "Abuja, Nigeria", desc: "An elegant family villa centred around a landscaped courtyard and seamless indoor-outdoor living.", img: U("u1iFdXU1tl0", 1400) },
+  { title: "Aurora Office Tower", cat: "Office Complexes", location: "Ikoyi, Lagos", desc: "A refined headquarters that balances light, acoustics, and a calm, contemporary corporate identity.", img: U("26MEa00pvbQ", 1400) },
+  { title: "Green Haven Apartments", cat: "Apartment Buildings", location: "Lekki, Lagos", desc: "A residential collection with generous balconies, landscaped pockets, and a measured sense of privacy.", img: U("KkYihWTf6Tw", 1400) },
+  { title: "Crestview Hotel", cat: "Hotels", location: "Abuja, Nigeria", desc: "A boutique hospitality concept where warm materials, curated circulation, and understated luxury meet.", img: U("eJlISrE0usI", 1400) },
+  { title: "Harmony Learning Centre", cat: "Schools", location: "Port Harcourt, Nigeria", desc: "A learning environment shaped around adaptability, daylight, and collaborative social spaces.", img: U("EUgLMtR13Ac", 1400) },
+  { title: "Nova Retail Plaza", cat: "Retail", location: "Lagos, Nigeria", desc: "A destination retail experience anchored by an airy promenade, signature storefronts, and flexible tenant planning.", img: U("Ckjt9861adU", 1400) },
 ];
 
 const PROJECT_CATEGORIES = ["All", ...new Set(PROJECTS.map(p => p.cat))];
@@ -87,39 +102,16 @@ const FAQS = [
   { cat: "Project Delivery", q: "Can Nexora Studio support construction?", a: "Yes. We can provide project management and on-site supervision to keep the build aligned with the approved design intent." },
 ];
 
-/* HERO BLUEPRINT DATA */
+/* TOWER AND MARQUEE DATA */
 
-const BLUEPRINT_STRUCTURE = [
-  "M0,520 L1200,520",
-  "M120,520 V360 H260 V520",
-  "M260,520 V260 H470 V520",
-  "M470,520 V120 H700 V520",
-  "M700,520 V300 H900 V520",
-  "M900,520 V400 H1060 V520",
-  "M440,200 H730",
+const TOWER_BLOCKS = [
+  { w: 14, d: 14, h: 70, y: 0 },
+  { w: 110, d: 90, h: 110, y: 70 },
+  { w: 160, d: 130, h: 130, y: 180 },
+  { w: 220, d: 180, h: 60, y: 310 },
 ];
 
-const BLUEPRINT_DETAILS = [
-  "M470,200 H700", "M470,280 H700", "M470,360 H700", "M470,440 H700",
-  "M527,120 V520", "M585,120 V520", "M642,120 V520",
-  "M260,340 H470", "M260,420 H470", "M330,260 V520", "M400,260 V520",
-  "M700,380 H900", "M700,460 H900", "M767,300 V520", "M833,300 V520",
-  "M900,460 H1060", "M953,400 V520", "M1007,400 V520",
-  "M120,440 H260", "M190,360 V520",
-];
-
-const BLUEPRINT_DIMENSIONS = [
-  "M120,560 H1060",
-  "M116,564 L124,556", "M256,564 L264,556", "M466,564 L474,556",
-  "M696,564 L704,556", "M896,564 L904,556", "M1056,564 L1064,556",
-  "M1120,120 V520",
-  "M1114,524 L1126,516", "M1114,124 L1126,116",
-];
-
-const BLUEPRINT_AXES = [
-  { x: 120, label: "A" }, { x: 260, label: "B" }, { x: 470, label: "C" },
-  { x: 700, label: "D" }, { x: 900, label: "E" }, { x: 1060, label: "F" },
-];
+const MARQUEE_ITEMS = ["ARCHITECTURE", "INTERIOR DESIGN", "CONSTRUCTION", "3D VISUALIZATION", "SITE SUPERVISION"];
 
 /* ------------------------------- HELPERS ---------------------------------- */
 
@@ -136,6 +128,15 @@ function useReveal() {
     return () => obs.disconnect();
   }, []);
   return [ref, visible];
+}
+
+function useImgReady() {
+  const ref = useRef(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (ref.current?.complete && ref.current.naturalWidth > 0) setReady(true);
+  }, []);
+  return [ref, ready, () => setReady(true)];
 }
 
 function Reveal({ children, className = "", delay = 0 }) {
@@ -167,6 +168,259 @@ function Counter({ value, suffix }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
+/* MOTION HELPERS */
+
+function ParallaxLayer({ children, speed = 0.18 }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    let raf = null;
+    const update = () => {
+      raf = null;
+      if (ref.current) ref.current.style.transform = `translate3d(0, ${window.scrollY * speed}px, 0)`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [speed]);
+  return <div ref={ref} className="absolute inset-x-0 -top-[20%] bottom-0 will-change-transform">{children}</div>;
+}
+
+function Scrim({ show, strength = 0.6 }) {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        background: `linear-gradient(to top, rgba(23,23,23,${strength}) 0%, rgba(23,23,23,${strength * 0.4}) 45%, rgba(23,23,23,0) 80%)`,
+        opacity: show ? 1 : 0,
+        transition: "opacity 1.2s ease 0.4s",
+      }}
+    />
+  );
+}
+
+function ImageWipe({ children, className = "", delay = 0 }) {
+  const [ref, visible] = useReveal();
+  return (
+    <div ref={ref} className={className}>
+      <div
+        className="h-full"
+        style={{ clipPath: visible ? "inset(0 0 0 0)" : "inset(0 0 100% 0)", transition: `clip-path 1.2s cubic-bezier(.77,0,.18,1) ${delay}ms` }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function ScrollProgress() {
+  const barRef = useRef(null);
+  useEffect(() => {
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+  return (
+    <div className="fixed top-0 left-0 right-0 z-[60] pointer-events-none" style={{ height: 3 }}>
+      <div ref={barRef} className="h-full origin-left" style={{ background: "#B56A35", transform: "scaleX(0)" }} />
+    </div>
+  );
+}
+
+/* ARCHITECT CURSOR */
+
+function ArchCursor() {
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
+  const hotRef = useRef(null);
+  const labelRef = useRef(null);
+
+  useEffect(() => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    document.documentElement.classList.add("nx-cursor");
+    let x = 0, y = 0, rx = 0, ry = 0, raf;
+
+    const move = (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      if (dotRef.current) {
+        dotRef.current.style.opacity = 1;
+        dotRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+      if (ringRef.current) ringRef.current.style.opacity = 1;
+      if (labelRef.current) {
+        labelRef.current.textContent = `X ${String(Math.round(x)).padStart(4, "0")} / Y ${String(Math.round(y + window.scrollY)).padStart(4, "0")}`;
+      }
+      if (hotRef.current) hotRef.current.classList.toggle("is-hot", !!e.target.closest("button, a, input, select, textarea"));
+    };
+
+    const loop = () => {
+      rx += (x - rx) * 0.14;
+      ry += (y - ry) * 0.14;
+      if (ringRef.current) ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+      raf = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener("mousemove", move);
+    raf = requestAnimationFrame(loop);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      cancelAnimationFrame(raf);
+      document.documentElement.classList.remove("nx-cursor");
+    };
+  }, []);
+
+  return (
+    <>
+      <div ref={ringRef} className="fixed top-0 left-0 z-[79] pointer-events-none" style={{ opacity: 0 }}>
+        <div ref={hotRef} className="nx-ring" />
+      </div>
+      <div ref={dotRef} className="fixed top-0 left-0 z-[80] pointer-events-none" style={{ opacity: 0 }}>
+        <span className="absolute" style={{ left: -10, top: 0, width: 20, height: 1, background: "#B56A35" }} />
+        <span className="absolute" style={{ left: 0, top: -10, width: 1, height: 20, background: "#B56A35" }} />
+        <span ref={labelRef} className="absolute whitespace-nowrap" style={{ left: 18, top: 16, fontFamily: "DM Sans, sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", color: "#B56A35", textShadow: "0 1px 8px rgba(0,0,0,0.55)" }} />
+      </div>
+    </>
+  );
+}
+
+/* HERO GRID */
+
+function HeroGrid() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    const parent = el && el.parentElement;
+    if (!parent) return;
+    const move = (e) => {
+      const r = parent.getBoundingClientRect();
+      el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    };
+    parent.addEventListener("mousemove", move);
+    return () => parent.removeEventListener("mousemove", move);
+  }, []);
+
+  return <div ref={ref} className="nx-grid absolute inset-0 pointer-events-none" />;
+}
+
+/* WIREFRAME TOWER */
+
+function WireBox({ w, d, h, y }) {
+  const base = {
+    position: "absolute",
+    border: "2px solid #E08A45",
+    backgroundColor: "rgba(23,23,23,0.22)",
+    backgroundImage: "repeating-linear-gradient(0deg, transparent 0 17px, rgba(224,138,69,0.6) 17px 19px), repeating-linear-gradient(90deg, transparent 0 17px, rgba(224,138,69,0.6) 17px 19px)",
+  };
+  return (
+    <div style={{ position: "absolute", left: 0, top: 0, width: 0, height: 0, transformStyle: "preserve-3d", transform: `translateY(${y}px)` }}>
+      <div style={{ ...base, width: w, height: h, left: -w / 2, top: 0, transform: `translateZ(${d / 2}px)` }} />
+      <div style={{ ...base, width: w, height: h, left: -w / 2, top: 0, transform: `rotateY(180deg) translateZ(${d / 2}px)` }} />
+      <div style={{ ...base, width: d, height: h, left: -d / 2, top: 0, transform: `rotateY(90deg) translateZ(${w / 2}px)` }} />
+      <div style={{ ...base, width: d, height: h, left: -d / 2, top: 0, transform: `rotateY(-90deg) translateZ(${w / 2}px)` }} />
+      <div style={{ ...base, width: w, height: d, left: -w / 2, top: -d / 2, transform: "rotateX(90deg)" }} />
+    </div>
+  );
+}
+
+function WireTower() {
+  return (
+    <div className="nx-fade absolute right-[5%] top-[14%] hidden lg:block pointer-events-none" style={{ "--d": "1s", width: 300, height: 400, perspective: 1400, transform: "scale(1.2)", transformOrigin: "top right" }} aria-hidden="true">
+      <div className="nx-spin" style={{ position: "relative", width: 300, height: 400, transformStyle: "preserve-3d" }}>
+        <div style={{ position: "absolute", left: 150, top: 10, transformStyle: "preserve-3d" }}>
+          {TOWER_BLOCKS.map((b) => <WireBox key={b.y} {...b} />)}
+          <div style={{ position: "absolute", width: 460, height: 460, left: -230, top: 140, border: "2px dashed rgba(224,138,69,0.9)", backgroundImage: "repeating-linear-gradient(0deg, transparent 0 29px, rgba(224,138,69,0.45) 29px 31px), repeating-linear-gradient(90deg, transparent 0 29px, rgba(224,138,69,0.45) 29px 31px)", transform: "rotateX(90deg)" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* OUTLINE MARQUEE */
+
+function Marquee() {
+  const row = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  return (
+    <div className="overflow-hidden py-12 select-none" style={{ background: "#FFFFFF", borderBottom: "1px solid rgba(23,23,23,0.08)" }}>
+      <div className="nx-marquee flex w-max items-center">
+        {row.map((t, i) => (
+          <div key={i} className="flex items-center shrink-0">
+            <span className="nx-outline" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, fontSize: "clamp(48px, 8vw, 120px)", lineHeight: 1, letterSpacing: "-0.02em", padding: "0 0.4em" }}>{t}</span>
+            <span style={{ width: 14, height: 14, background: "#B56A35", transform: "rotate(45deg)" }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* TILT CARD */
+
+function Tilt({ children, className = "", max = 8 }) {
+  const ref = useRef(null);
+
+  const move = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(900px) rotateY(${px * max}deg) rotateX(${-py * max}deg) scale3d(1.02,1.02,1.02)`;
+  };
+
+  const leave = () => {
+    if (ref.current) ref.current.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
+  };
+
+  return (
+    <div ref={ref} onMouseMove={move} onMouseLeave={leave} className={className} style={{ transition: "transform 0.5s cubic-bezier(.16,.84,.44,1)" }}>
+      {children}
+    </div>
+  );
+}
+
+function PageHero({ image, eyebrow, title, className = "" }) {
+  const [imgRef, ready, onReady] = useImgReady();
+
+  return (
+    <section className={`relative flex items-end overflow-hidden ${className}`}>
+      <ParallaxLayer>
+        <img
+          ref={imgRef}
+          src={image}
+          alt=""
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          onLoad={onReady}
+          onError={onReady}
+          className={`nx-reveal-img w-full h-full object-cover${ready ? " is-ready" : ""}`}
+        />
+      </ParallaxLayer>
+      <Scrim show={ready} strength={0.7} />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-14 lg:pb-16 w-full" style={{ visibility: ready ? "visible" : "hidden" }}>
+        <div className={ready ? "nx-rise" : ""} style={{ "--d": "0.6s" }}>
+          <SectionEyebrow dark>{eyebrow}</SectionEyebrow>
+        </div>
+        <h1 className={`${ready ? "nx-rise " : ""}text-4xl lg:text-6xl`} style={{ "--d": "0.75s", fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", textShadow: "0 2px 30px rgba(0,0,0,0.45)" }}>{title}</h1>
+        <span className={`${ready ? "nx-grow " : ""}block mt-6`} style={{ "--d": "1.1s", width: 96, height: 2, background: "#B56A35" }} />
+      </div>
+    </section>
+  );
+}
+
 /* DRAFT MARKS */
 function DraftMarks({ dark }) {
   const c = dark ? "rgba(200,155,60,0.55)" : "rgba(200,155,60,0.65)";
@@ -195,12 +449,21 @@ function Logo({ dark }) {
 }
 
 function GoldButton({ children, onClick, icon: Icon = ArrowRight, className = "" }) {
+  const pull = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.22}px, ${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
+  };
+  const release = (e) => {
+    e.currentTarget.style.transform = "translate(0px, 0px)";
+    e.currentTarget.style.background = "#B56A35";
+  };
   return (
     <button onClick={onClick}
       className={`group inline-flex items-center gap-2.5 px-7 py-3.5 text-sm tracking-wide transition-all duration-300 ${className}`}
       style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "#B56A35", color: "#171717", borderRadius: 2 }}
+      onMouseMove={pull}
       onMouseEnter={e => e.currentTarget.style.background = "#C77A43"}
-      onMouseLeave={e => e.currentTarget.style.background = "#B56A35"}>
+      onMouseLeave={release}>
       {children}
       <Icon size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
     </button>
@@ -283,72 +546,53 @@ function Nav({ page, setPage, dark, scrolled }) {
 
 /* --------------------------------- HERO ------------------------------------ */
 
-function BlueprintLines({ lines, start, width }) {
-  return lines.map((d, i) => (
-    <path key={d} d={d} pathLength="1" strokeWidth={width} className="nx-draw" style={{ "--i": start + i }} />
-  ));
-}
-
-function HeroBlueprint() {
-  const detailsStart = BLUEPRINT_STRUCTURE.length;
-  const dimensionsStart = detailsStart + BLUEPRINT_DETAILS.length;
-
-  return (
-    <svg viewBox="0 0 1200 600" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.35))" }}>
-      <g fill="none" stroke="#B56A35" strokeLinecap="square" strokeLinejoin="miter" opacity="0.95">
-        <g className="nx-fade" strokeWidth="1.2" strokeDasharray="6 8" style={{ "--d": "0.4s" }}>
-          {BLUEPRINT_AXES.map((a) => <path key={a.label} d={`M${a.x},50 V590`} />)}
-        </g>
-        <g className="nx-fade" strokeWidth="1.6" style={{ "--d": "0.8s" }}>
-          {BLUEPRINT_AXES.map((a) => (
-            <g key={a.label}>
-              <circle cx={a.x} cy="36" r="13" />
-              <text x={a.x} y="41" textAnchor="middle" fill="#B56A35" stroke="none" fontSize="13" fontWeight="700" fontFamily="DM Sans, sans-serif">{a.label}</text>
-            </g>
-          ))}
-        </g>
-        <BlueprintLines lines={BLUEPRINT_STRUCTURE} start={0} width={3.2} />
-        <BlueprintLines lines={BLUEPRINT_DETAILS} start={detailsStart} width={1.6} />
-        <BlueprintLines lines={BLUEPRINT_DIMENSIONS} start={dimensionsStart} width={1.8} />
-      </g>
-    </svg>
-  );
-}
-
 function Hero({ setPage }) {
+  const [imgRef, ready, onReady] = useImgReady();
+
   return (
-    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden">
-      <img
-        src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=2000&q=80"
-        alt=""
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden" style={{ background: "#171717" }}>
+      <ParallaxLayer>
+        <img
+          ref={imgRef}
+          src={HOME_HERO}
+          alt=""
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          onLoad={onReady}
+          onError={onReady}
+          className="nx-kenburns w-full h-full object-cover"
+          style={{ opacity: ready ? 1 : 0, transition: "opacity 0.35s ease" }}
+        />
+      </ParallaxLayer>
 
-      <HeroBlueprint />
+      <Scrim show={ready} strength={0.65} />
+      <HeroGrid />
+      <WireTower />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-24 lg:pb-32 w-full">
-        <div className="nx-rise flex items-center gap-3 mb-7" style={{ "--d": "0s" }}>
+      <div
+        className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-24 lg:pb-32 w-full"
+        style={{ opacity: ready ? 1 : 0, visibility: ready ? "visible" : "hidden", transition: "opacity 0.5s ease" }}
+      >
+        <div className={ready ? "nx-rise flex items-center gap-3 mb-7" : "flex items-center gap-3 mb-7"} style={{ "--d": "0s" }}>
           <span style={{ width: 40, height: 1, background: "#B56A35" }} />
           <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.3em", color: "#B56A35" }}>ARCHITECTURE · INTERIOR DESIGN · CONSTRUCTION CONSULTANCY</span>
         </div>
-        <h1 className="nx-rise text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.06] max-w-4xl" style={{ "--d": "0.08s", fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
+        <h1 className={`${ready ? "nx-rise " : ""}text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.06] max-w-4xl`} style={{ "--d": "0.08s", fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.01em", textShadow: "0 2px 30px rgba(0,0,0,0.45)" }}>
           Designing Spaces That Inspire Tomorrow
         </h1>
-        <p className="nx-rise mt-7 max-w-xl text-base lg:text-lg" style={{ "--d": "0.16s", fontFamily: "Inter, sans-serif", color: "#E5E5E5", lineHeight: 1.7 }}>
+        <p className={`${ready ? "nx-rise " : ""}mt-7 max-w-xl text-base lg:text-lg`} style={{ "--d": "0.16s", fontFamily: "Inter, sans-serif", color: "#F5F5F5", lineHeight: 1.7, textShadow: "0 1px 16px rgba(0,0,0,0.45)" }}>
           From modern homes to commercial developments, Nexora Studio delivers architectural solutions that combine creativity, functionality, and timeless design.
         </p>
-        <div className="nx-rise mt-10 flex flex-wrap gap-4" style={{ "--d": "0.24s" }}>
+        <div className={`${ready ? "nx-rise " : ""}mt-10 flex flex-wrap gap-4`} style={{ "--d": "0.24s" }}>
           <GoldButton onClick={() => setPage("projects")}>Explore Projects</GoldButton>
           <GhostButton onClick={() => setPage("contact")} dark>Book a Consultation</GhostButton>
         </div>
       </div>
 
-      <div className="absolute bottom-8 right-8 hidden md:flex flex-col items-center gap-2 z-10" style={{ color: "rgba(248,250,252,0.5)" }}>
+      <div className="absolute bottom-8 right-8 hidden md:flex flex-col items-center gap-2 z-10" style={{ color: "rgba(248,250,252,0.7)", opacity: ready ? 1 : 0, transition: "opacity 0.5s ease" }}>
         <span style={{ writingMode: "vertical-rl", fontFamily: "DM Sans, sans-serif", fontSize: 10, letterSpacing: "0.25em" }}>SCROLL</span>
-        <span style={{ width: 1, height: 40, background: "rgba(248,250,252,0.3)" }} />
+        <span style={{ width: 1, height: 40, background: "rgba(248,250,252,0.4)" }} />
       </div>
     </section>
   );
@@ -362,7 +606,9 @@ function AboutPreview({ dark, setPage }) {
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
         <Reveal className="relative">
           <div className="relative">
-            <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80" alt="Nexora Studio studio" className="w-full h-[420px] object-cover" />
+            <ImageWipe>
+              <img src={U("SQfsaXqdXLU", 1400)} alt="Nexora Studio studio" className="w-full h-[420px] object-cover" />
+            </ImageWipe>
             <div className="absolute -bottom-8 -right-8 hidden sm:block p-6" style={{ background: "#B56A35", maxWidth: 220 }}>
               <div style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, fontSize: 32, color: "#171717" }}>35+</div>
               <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#171717" }}>Concept-led spaces shaped across modern cities</div>
@@ -470,7 +716,7 @@ function FeaturedProjects({ dark, setPage }) {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {featured.map((p, i) => (
             <Reveal key={p.title} delay={i * 70}>
-              <ProjectCard p={p} dark={dark} />
+              <Tilt><ProjectCard p={p} dark={dark} /></Tilt>
             </Reveal>
           ))}
         </div>
@@ -480,21 +726,25 @@ function FeaturedProjects({ dark, setPage }) {
 }
 
 function ProjectCard({ p, dark }) {
+  const [imgRef, ready, onReady] = useImgReady();
   return (
     <div className="group relative overflow-hidden cursor-pointer">
       <div className="relative h-72 overflow-hidden">
-        <img src={p.img} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <img ref={imgRef} onLoad={onReady} onError={onReady} src={p.img} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <Scrim show={ready} strength={0.85} />
         <span className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-widest" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "rgba(200,155,60,0.92)", color: "#171717" }}>{p.cat.toUpperCase()}</span>
         <div className="absolute bottom-0 left-0 right-0 p-6">
-          <div className="flex items-center gap-1.5 mb-1.5" style={{ color: "#B56A35" }}><MapPin size={12} /><span style={{ fontFamily: "Inter, sans-serif", fontSize: 11.5 }}>{p.location}</span></div>
+          <div className="flex items-center gap-1.5 mb-1.5" style={{ color: "#E08A45" }}><MapPin size={12} /><span style={{ fontFamily: "Inter, sans-serif", fontSize: 11.5 }}>{p.location}</span></div>
           <h3 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: "#FFFFFF" }} className="text-lg mb-2">{p.title}</h3>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#A3A3A3", lineHeight: 1.6 }} className="max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 overflow-hidden">{p.desc}</p>
-          <span className="inline-flex items-center gap-1.5 mt-3 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: "#B56A35" }}>PROJECT DETAILS <ArrowUpRight size={13} /></span>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#F1F1F1", lineHeight: 1.6 }} className="max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 overflow-hidden">{p.desc}</p>
+          <span className="inline-flex items-center gap-1.5 mt-3 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: "#E08A45" }}>PROJECT DETAILS <ArrowUpRight size={13} /></span>
         </div>
       </div>
     </div>
   );
 }
+
+
 
 function ProcessTimeline({ dark }) {
   return (
@@ -506,15 +756,80 @@ function ProcessTimeline({ dark }) {
             Eight stages, one accountable team
           </h2>
         </Reveal>
+
         <div className="relative pl-10 sm:pl-16">
-          <span className="absolute top-2 bottom-2 left-3 sm:left-5" style={{ width: 1, background: dark ? "rgba(200,155,60,0.3)" : "rgba(200,155,60,0.35)" }} />
+          {/* Vertical timeline line */}
+          <span
+            className="absolute top-2 bottom-2 left-3 sm:left-5"
+            style={{
+              width: 1,
+              background: "#B56A35"
+            }}
+          />
+
           {PROCESS_STEPS.map((s, i) => (
             <Reveal key={s.title} delay={i * 60} className="relative pb-12 last:pb-0">
-              <span className="absolute -left-10 sm:-left-16 top-0 flex items-center justify-center" style={{ width: 24, height: 24, borderRadius: "50%", background: dark ? "#F7F6F2" : "#FFFFFF", border: "1px solid #B56A35" }}>
-                <span style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 10, color: "#B56A35" }}>{String(i + 1).padStart(2, "0")}</span>
+
+              {/* Background stage number */}
+              <span
+                className="nx-outline absolute right-0 top-0 hidden md:block select-none pointer-events-none"
+                style={{
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 110,
+                  lineHeight: 1,
+                  opacity: 0.35
+                }}
+              >
+                {String(i + 1).padStart(2, "0")}
               </span>
-              <h3 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: dark ? "#FFFFFF" : "#171717" }} className="text-lg mb-2">{s.title}</h3>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#737373" : "#525252", lineHeight: 1.7, maxWidth: 520 }}>{s.desc}</p>
+
+              {/* Numbered circle aligned with vertical line */}
+              <span
+                className="absolute -left-10 sm:-left-14 top-0 z-10 flex items-center justify-center"
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: "50%",
+                  background: dark ? "#F7F6F2" : "#FFFFFF",
+                  border: "1px solid #B56A35",
+                  boxSizing: "border-box"
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: 600,
+                    fontSize: 10,
+                    color: "#B56A35"
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </span>
+
+              <h3
+                style={{
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: 600,
+                  color: dark ? "#FFFFFF" : "#171717"
+                }}
+                className="text-lg mb-2"
+              >
+                {s.title}
+              </h3>
+
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 14,
+                  color: dark ? "#737373" : "#525252",
+                  lineHeight: 1.7,
+                  maxWidth: 520
+                }}
+              >
+                {s.desc}
+              </p>
             </Reveal>
           ))}
         </div>
@@ -522,6 +837,7 @@ function ProcessTimeline({ dark }) {
     </section>
   );
 }
+
 
 function Stats({ dark }) {
   return (
@@ -577,16 +893,21 @@ function PartnersStrip({ dark }) {
 }
 
 function CallToAction({ setPage }) {
+  const [imgRef, ready, onReady] = useImgReady();
   return (
-    <section className="relative py-28 px-6 lg:px-10 overflow-hidden" style={{ background: "#171717" }}>
-      <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
+    <section className="relative py-28 px-6 lg:px-10 overflow-hidden">
+      <img ref={imgRef} onLoad={onReady} onError={onReady} src={U("J2GhKlTKV9M", 2000)} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to top, rgba(23,23,23,0.7) 0%, rgba(23,23,23,0.5) 50%, rgba(23,23,23,0.35) 100%)", opacity: ready ? 1 : 0, transition: "opacity 1.2s ease 0.4s" }}
+      />
 
       <div className="relative max-w-4xl mx-auto text-center">
         <Reveal>
-          <h2 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-3xl lg:text-[2.6rem] leading-tight mb-6">
+          <h2 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF", textShadow: "0 2px 24px rgba(0,0,0,0.45)" }} className="text-3xl lg:text-[2.6rem] leading-tight mb-6">
             Ready to build something that lasts generations?
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", color: "#737373" }} className="mb-10 max-w-xl mx-auto">
+          <p style={{ fontFamily: "Inter, sans-serif", color: "#F5F5F5", textShadow: "0 1px 16px rgba(0,0,0,0.45)" }} className="mb-10 max-w-xl mx-auto">
             Book a consultation with our design team and bring your vision to a licensed architect's table.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
@@ -686,14 +1007,7 @@ function AboutPage({ dark }) {
   ];
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
-      <section className="relative h-[52vh] min-h-[420px] flex items-end" style={{ background: "#171717" }}>
-        <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-16 w-full">
-          <SectionEyebrow dark>ABOUT NEXORA STUDIO</SectionEyebrow>
-          <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Our Story</h1>
-        </div>
-      </section>
+      <PageHero image={PAGE_HEROES.about} eyebrow="ABOUT NEXORA STUDIO" title="Our Story" className="h-[52vh] min-h-[420px]" />
 
       <section className="py-24 px-6 lg:px-10">
         <div className="max-w-5xl mx-auto">
@@ -752,7 +1066,9 @@ function AboutPage({ dark }) {
             {team.map((m, i) => (
               <Reveal key={m.name} delay={i * 70}>
                 <div className="text-center">
-                  <div className="h-64 mb-5 overflow-hidden"><img src={m.img} alt={m.name} className="w-full h-full object-cover" /></div>
+                  <ImageWipe className="h-64 mb-5 overflow-hidden" delay={i * 120}>
+                    <img src={m.img} alt={m.name} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                  </ImageWipe>
                   <h3 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: dark ? "#FFFFFF" : "#171717" }} className="text-base">{m.name}</h3>
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "#B56A35" }}>{m.role}</p>
                 </div>
@@ -794,14 +1110,7 @@ function ServicesPage({ dark }) {
   const list = activeCat === "All" ? SERVICES : SERVICES.filter(s => s.cat === activeCat);
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
-      <section className="relative h-[46vh] min-h-[360px] flex items-end" style={{ background: "#171717" }}>
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
-          <SectionEyebrow dark>OUR SERVICES</SectionEyebrow>
-          <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Design services for every stage of the journey</h1>
-        </div>
-      </section>
+      <PageHero image={PAGE_HEROES.services} eyebrow="OUR SERVICES" title="Design services for every stage of the journey" className="h-[46vh] min-h-[360px]" />
 
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
@@ -869,14 +1178,7 @@ function ProjectsPage({ dark }) {
   const list = cat === "All" ? PROJECTS : PROJECTS.filter(p => p.cat === cat);
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
-      <section className="relative h-[46vh] min-h-[360px] flex items-end" style={{ background: "#171717" }}>
-        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
-          <SectionEyebrow dark>OUR PORTFOLIO</SectionEyebrow>
-          <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Spaces shaped for modern living</h1>
-        </div>
-      </section>
+      <PageHero image={PAGE_HEROES.projects} eyebrow="OUR PORTFOLIO" title="Spaces shaped for modern living" className="h-[46vh] min-h-[360px]" />
 
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
@@ -890,7 +1192,7 @@ function ProjectsPage({ dark }) {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {list.map((p, i) => (
-              <Reveal key={p.title} delay={(i % 6) * 60}><ProjectCard p={p} dark={dark} /></Reveal>
+              <Reveal key={p.title} delay={(i % 6) * 60}><Tilt><ProjectCard p={p} dark={dark} /></Tilt></Reveal>
             ))}
           </div>
         </div>
@@ -902,33 +1204,124 @@ function ProjectsPage({ dark }) {
   );
 }
 
+
 function BeforeAfter({ dark }) {
   const [pos, setPos] = useState(50);
+
   return (
     <section className="py-24 px-6 lg:px-10" style={{ background: dark ? "#171717" : "#FFFFFF" }}>
       <div className="max-w-5xl mx-auto">
         <Reveal className="max-w-xl mb-12">
           <SectionEyebrow dark={dark}>RENOVATION SPOTLIGHT</SectionEyebrow>
-          <h2 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: dark ? "#FFFFFF" : "#171717" }} className="text-3xl leading-tight">The Willow Villa — drag to compare</h2>
+          <h2
+            style={{
+              fontFamily: "DM Sans, sans-serif",
+              fontWeight: 700,
+              color: dark ? "#FFFFFF" : "#171717"
+            }}
+            className="text-3xl leading-tight"
+          >
+            The Willow Villa — drag to compare
+          </h2>
         </Reveal>
-        <div className="relative h-[420px] select-none" style={{ touchAction: "none" }}>
-          <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80" alt="After renovation" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Before renovation" className="h-full object-cover" style={{ width: "420px", maxWidth: "none" }} />
+
+        {/* Before and After Comparison */}
+        <div className="relative h-[420px] w-full overflow-hidden select-none" style={{ touchAction: "none" }}>
+
+          {/* After Image */}
+          <img
+            src={U("u1iFdXU1tl0", 1400)}
+            alt="After renovation"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: "center" }}
+            draggable="false"
+          />
+
+          {/* Before Image */}
+          <div
+            className="absolute inset-0 overflow-hidden"
+            style={{
+              clipPath: `inset(0 ${100 - pos}% 0 0)`
+            }}
+          >
+            <img
+              src={U("5EazjioPXck", 1400)}
+              alt="Before renovation"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: "center" }}
+              draggable="false"
+            />
           </div>
-          <div className="absolute top-0 bottom-0" style={{ left: `${pos}%`, width: 2, background: "#B56A35", transform: "translateX(-1px)" }} />
-          <div className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center" style={{ left: `${pos}%`, transform: "translate(-50%,-50%)", width: 40, height: 40, borderRadius: "50%", background: "#B56A35" }}>
+
+          {/* Comparison Line */}
+          <div
+            className="absolute top-0 bottom-0 z-10 pointer-events-none"
+            style={{
+              left: `${pos}%`,
+              width: 2,
+              background: "#B56A35",
+              transform: "translateX(-50%)"
+            }}
+          />
+
+          {/* Drag Handle */}
+          <div
+            className="absolute top-1/2 z-20 flex items-center justify-center pointer-events-none"
+            style={{
+              left: `${pos}%`,
+              transform: "translate(-50%, -50%)",
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              background: "#B56A35"
+            }}
+          >
             <ChevronRight size={14} style={{ color: "#171717", marginRight: -4 }} />
             <ChevronRight size={14} style={{ color: "#171717", transform: "rotate(180deg)", marginLeft: -4 }} />
           </div>
-          <input type="range" min="0" max="100" value={pos} onChange={(e) => setPos(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize" aria-label="Before and after comparison slider" />
-          <span className="absolute top-4 left-4 px-3 py-1 text-[10px]" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "rgba(23,23,23,0.7)", color: "#FFFFFF" }}>BEFORE</span>
-          <span className="absolute top-4 right-4 px-3 py-1 text-[10px]" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "rgba(200,155,60,0.9)", color: "#171717" }}>AFTER</span>
+
+          {/* Slider Control */}
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={pos}
+            onChange={(e) => setPos(Number(e.target.value))}
+            className="absolute inset-0 z-30 w-full h-full opacity-0 cursor-ew-resize"
+            aria-label="Before and after comparison slider"
+          />
+
+          {/* Before Label */}
+          <span
+            className="absolute top-4 left-4 z-10 px-3 py-1 text-[10px] pointer-events-none"
+            style={{
+              fontFamily: "DM Sans, sans-serif",
+              fontWeight: 600,
+              background: "rgba(23,23,23,0.7)",
+              color: "#FFFFFF"
+            }}
+          >
+            BEFORE
+          </span>
+
+          {/* After Label */}
+          <span
+            className="absolute top-4 right-4 z-10 px-3 py-1 text-[10px] pointer-events-none"
+            style={{
+              fontFamily: "DM Sans, sans-serif",
+              fontWeight: 600,
+              background: "rgba(200,155,60,0.9)",
+              color: "#171717"
+            }}
+          >
+            AFTER
+          </span>
         </div>
       </div>
     </section>
   );
 }
+
 
 /* ------------------------------ PAGE: CONTACT ------------------------------- */
 
@@ -944,14 +1337,7 @@ function ContactPage({ dark }) {
 
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
-      <section className="relative h-[42vh] min-h-[320px] flex items-end" style={{ background: "#171717" }}>
-        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
-          <SectionEyebrow dark>GET IN TOUCH</SectionEyebrow>
-          <h1 style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700, color: "#FFFFFF" }} className="text-4xl lg:text-6xl">Let's design what's next</h1>
-        </div>
-      </section>
+      <PageHero image={PAGE_HEROES.contact} eyebrow="GET IN TOUCH" title="Let's design what's next" className="h-[42vh] min-h-[320px]" />
 
       <section className="py-24 px-6 lg:px-10">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-5 gap-16">
@@ -1054,8 +1440,13 @@ export default function App() {
     return () => window.removeEventListener("scroll", h);
   }, []);
 
+  useEffect(() => {
+    PRELOAD_IMAGES.forEach((src) => { const img = new Image(); img.src = src; });
+  }, []);
+
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF", minHeight: "100vh" }}>
+      <link rel="preload" as="image" href={HOME_HERO} fetchPriority="high" />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
         * { box-sizing: border-box; }
@@ -1076,34 +1467,63 @@ export default function App() {
 
         .nx-rise { animation: nx-rise 0.7s cubic-bezier(.16,.84,.44,1) var(--d, 0s) backwards; }
         .nx-fade { animation: nx-fade 1.4s ease var(--d, 0s) backwards; }
-        .nx-draw { stroke-dasharray: 1; animation: nx-draw 7s cubic-bezier(.4,0,.2,1) calc(var(--i) * 0.35s + 0.4s) backwards; }
         @keyframes nx-rise { from { opacity: 0; transform: translateY(16px); } }
         @keyframes nx-fade { from { opacity: 0; } }
-        @keyframes nx-draw { from { stroke-dashoffset: 1; } }
 
-        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+        .nx-reveal-img { clip-path: inset(100% 0 0 0); transform: scale(1.18); }
+        .nx-reveal-img.is-ready { clip-path: inset(0 0 0 0); transform: scale(1); transition: clip-path 1.5s cubic-bezier(.77,0,.18,1), transform 2.6s cubic-bezier(.16,.84,.44,1); }
+        .nx-kenburns { animation: nx-kenburns 18s cubic-bezier(.16,.84,.44,1) both; }
+        .nx-grow { transform-origin: left; animation: nx-grow 1.1s cubic-bezier(.77,0,.18,1) var(--d, 0s) backwards; }
+        .nx-page { animation: nx-page 0.8s cubic-bezier(.16,.84,.44,1) backwards; }
+        @keyframes nx-kenburns { from { transform: scale(1.14); } to { transform: scale(1); } }
+        @keyframes nx-grow { from { transform: scaleX(0); } }
+        @keyframes nx-page { from { opacity: 0; transform: translateY(24px); } }
+
+        html.nx-cursor, html.nx-cursor * { cursor: none !important; }
+        html.nx-cursor input, html.nx-cursor textarea, html.nx-cursor select { cursor: text !important; }
+        .nx-ring { width: 36px; height: 36px; margin: -18px 0 0 -18px; border: 1px solid #B56A35; border-radius: 50%; transition: transform 0.3s ease, background 0.3s ease; }
+        .nx-ring.is-hot { transform: scale(1.9); background: rgba(181,106,53,0.15); }
+
+        .nx-grid { --mx: 50%; --my: 50%; background-image: linear-gradient(rgba(255,255,255,0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.55) 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: radial-gradient(circle 260px at var(--mx) var(--my), #000, transparent); mask-image: radial-gradient(circle 260px at var(--mx) var(--my), #000, transparent); }
+
+        .nx-spin { transform: rotateX(-18deg) rotateY(30deg); animation: nx-spin 48s linear infinite; }
+        @keyframes nx-spin { from { transform: rotateX(-18deg) rotateY(0deg); } to { transform: rotateX(-18deg) rotateY(360deg); } }
+
+        .nx-marquee { animation: nx-marquee 38s linear infinite; }
+        .nx-marquee:hover { animation-play-state: paused; }
+        @keyframes nx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        .nx-outline { color: transparent; -webkit-text-stroke: 1.5px #171717; transition: color 0.4s ease, -webkit-text-stroke-color 0.4s ease; }
+        .nx-outline:hover { color: #B56A35; -webkit-text-stroke-color: #B56A35; }
+
+        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .nx-reveal-img { clip-path: none; transform: none; } }
       `}</style>
 
+      <ScrollProgress />
+      <ArchCursor />
       <Nav page={page} setPage={setPage} dark={dark} scrolled={scrolled} />
 
-      {page === "home" && (
-        <>
-          <Hero setPage={setPage} />
-          <AboutPreview dark={dark} setPage={setPage} />
-          <FeaturedServices dark={dark} setPage={setPage} />
-          <WhyChooseUs dark={dark} />
-          <FeaturedProjects dark={dark} setPage={setPage} />
-          <ProcessTimeline dark={dark} />
-          <Stats dark={dark} />
-          <Testimonials dark={dark} />
-          <PartnersStrip dark={dark} />
-          <CallToAction setPage={setPage} />
-        </>
-      )}
-      {page === "about" && <AboutPage dark={dark} />}
-      {page === "services" && <ServicesPage dark={dark} />}
-      {page === "projects" && <ProjectsPage dark={dark} />}
-      {page === "contact" && <ContactPage dark={dark} />}
+      <div key={page} className="nx-page">
+        {page === "home" && (
+          <>
+            <Hero setPage={setPage} />
+            <Marquee />
+            <AboutPreview dark={dark} setPage={setPage} />
+            <FeaturedServices dark={dark} setPage={setPage} />
+            <WhyChooseUs dark={dark} />
+            <FeaturedProjects dark={dark} setPage={setPage} />
+            <ProcessTimeline dark={dark} />
+            <Stats dark={dark} />
+            <Testimonials dark={dark} />
+            <PartnersStrip dark={dark} />
+            <CallToAction setPage={setPage} />
+          </>
+        )}
+        {page === "about" && <AboutPage dark={dark} />}
+        {page === "services" && <ServicesPage dark={dark} />}
+        {page === "projects" && <ProjectsPage dark={dark} />}
+        {page === "contact" && <ContactPage dark={dark} />}
+      </div>
 
       <section className="py-4" style={{ background: dark ? "#171717" : "#FFFFFF" }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4 flex flex-wrap justify-center gap-x-8 gap-y-2">
