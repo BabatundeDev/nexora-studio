@@ -30,7 +30,7 @@ const SERVICE_CATEGORIES = [...new Set(SERVICES.map(s => s.cat))];
 
 const U = (id, w = 1800) => `https://unsplash.com/photos/${id}/download?force=true&w=${w}`;
 
-const HOME_HERO = U("NliDSNubTag", 2400);
+const HOME_HERO = U("J2GhKlTKV9M", 1600);
 
 const PAGE_HEROES = {
   about: U("a8Slhd4Kvxw"),
@@ -39,7 +39,7 @@ const PAGE_HEROES = {
   contact: U("Xs0Run-Z5aw"),
 };
 
-const PRELOAD_IMAGES = [HOME_HERO, ...Object.values(PAGE_HEROES)];
+const PRELOAD_IMAGES = Object.values(PAGE_HEROES);
 
 const PROJECTS = [
   { title: "Horizon Residence", cat: "Luxury Homes", location: "Lagos, Nigeria", desc: "A sculptural coastal home framed by open terraces, private courtyards, and panoramic views.", img: U("hHz4yrvxwlA", 1400) },
@@ -121,20 +121,24 @@ function useReveal() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setVisible(true); obs.disconnect(); }
-    }, { threshold: 0.15 });
+    if (typeof IntersectionObserver === "undefined") { setVisible(true); return; }
+    const obs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { setVisible(true); obs.disconnect(); }
+    }, { threshold: 0, rootMargin: "0px 0px -8% 0px" });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
   return [ref, visible];
 }
 
-function useImgReady() {
+function useImgReady(fallbackMs = 0) {
   const ref = useRef(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (ref.current?.complete && ref.current.naturalWidth > 0) setReady(true);
+    if (!fallbackMs) return;
+    const t = setTimeout(() => setReady(true), fallbackMs);
+    return () => clearTimeout(t);
   }, []);
   return [ref, ready, () => setReady(true)];
 }
@@ -337,7 +341,7 @@ function WireBox({ w, d, h, y }) {
 
 function WireTower() {
   return (
-    <div className="nx-fade absolute right-[5%] top-[14%] hidden lg:block pointer-events-none" style={{ "--d": "1s", width: 300, height: 400, perspective: 1400, transform: "scale(1.2)", transformOrigin: "top right" }} aria-hidden="true">
+    <div className="nx-tower nx-fade absolute pointer-events-none" style={{ "--d": "1s", width: 300, height: 400, perspective: 1400 }} aria-hidden="true">
       <div className="nx-spin" style={{ position: "relative", width: 300, height: 400, transformStyle: "preserve-3d" }}>
         <div style={{ position: "absolute", left: 150, top: 10, transformStyle: "preserve-3d" }}>
           {TOWER_BLOCKS.map((b) => <WireBox key={b.y} {...b} />)}
@@ -392,7 +396,7 @@ function Tilt({ children, className = "", max = 8 }) {
 }
 
 function PageHero({ image, eyebrow, title, className = "" }) {
-  const [imgRef, ready, onReady] = useImgReady();
+  const [imgRef, ready, onReady] = useImgReady(4000);
 
   return (
     <section className={`relative flex items-end overflow-hidden ${className}`}>
@@ -499,7 +503,7 @@ function Nav({ page, setPage, dark, scrolled }) {
   const go = (p) => { setPage(p); setOpen(false); setMegaOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   const bg = scrolled || page !== "home" ? (dark ? "rgba(11,18,32,0.92)" : "rgba(255,255,255,0.95)") : "transparent";
-  const txt = scrolled || page !== "home" ? (dark ? "#FFFFFF" : "#171717") : "#FFFFFF";
+  const txt = scrolled || page !== "home" ? (dark ? "#FFFFFF" : "#171717") : "#171717";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style={{ background: bg, backdropFilter: (scrolled || page !== "home") ? "blur(14px)" : "none", borderBottom: (scrolled || page !== "home") ? `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(23,23,23,0.08)"}` : "none" }}>
@@ -547,10 +551,10 @@ function Nav({ page, setPage, dark, scrolled }) {
 /* --------------------------------- HERO ------------------------------------ */
 
 function Hero({ setPage }) {
-  const [imgRef, ready, onReady] = useImgReady();
+  const [imgRef, ready, onReady] = useImgReady(3000);
 
   return (
-    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden" style={{ background: "#171717" }}>
+    <section className="relative h-screen min-h-[720px] flex items-end overflow-hidden">
       <ParallaxLayer>
         <img
           ref={imgRef}
@@ -558,16 +562,15 @@ function Hero({ setPage }) {
           alt=""
           fetchPriority="high"
           loading="eager"
-          decoding="async"
+          decoding="sync"
           onLoad={onReady}
           onError={onReady}
           className="nx-kenburns w-full h-full object-cover"
-          style={{ opacity: ready ? 1 : 0, transition: "opacity 0.35s ease" }}
+          style={{ opacity: 1 }}
         />
       </ParallaxLayer>
 
       <Scrim show={ready} strength={0.65} />
-      <HeroGrid />
       <WireTower />
 
       <div
@@ -745,7 +748,6 @@ function ProjectCard({ p, dark }) {
 }
 
 
-
 function ProcessTimeline({ dark }) {
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-10" style={{ background: dark ? "#F7F6F2" : "#FFFFFF" }}>
@@ -769,20 +771,6 @@ function ProcessTimeline({ dark }) {
 
           {PROCESS_STEPS.map((s, i) => (
             <Reveal key={s.title} delay={i * 60} className="relative pb-12 last:pb-0">
-
-              {/* Background stage number */}
-              <span
-                className="nx-outline absolute right-0 top-0 hidden md:block select-none pointer-events-none"
-                style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 110,
-                  lineHeight: 1,
-                  opacity: 0.35
-                }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
 
               {/* Numbered circle aligned with vertical line */}
               <span
@@ -896,7 +884,7 @@ function CallToAction({ setPage }) {
   const [imgRef, ready, onReady] = useImgReady();
   return (
     <section className="relative py-28 px-6 lg:px-10 overflow-hidden">
-      <img ref={imgRef} onLoad={onReady} onError={onReady} src={U("J2GhKlTKV9M", 2000)} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <img ref={imgRef} onLoad={onReady} onError={onReady} src={HOME_HERO} alt="" fetchPriority="high" loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "linear-gradient(to top, rgba(23,23,23,0.7) 0%, rgba(23,23,23,0.5) 50%, rgba(23,23,23,0.35) 100%)", opacity: ready ? 1 : 0, transition: "opacity 1.2s ease 0.4s" }}
@@ -1350,7 +1338,7 @@ function ContactPage({ dark }) {
                 <div className="flex gap-4"><Clock size={20} style={{ color: "#B56A35" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: dark ? "#FFFFFF" : "#171717" }} className="mb-1">Business Hours</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#737373" : "#525252" }}>Monday – Friday, 9:00 AM – 6:00 PM</p></div></div>
                 <div className="flex gap-4"><Mail size={20} style={{ color: "#B56A35" }} className="flex-shrink-0 mt-1" /><div><div style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, color: dark ? "#FFFFFF" : "#171717" }} className="mb-1">Email</div><p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: dark ? "#737373" : "#525252" }}>hello@nexorastudio.design</p></div></div>
               </div>
-              <a href="https://wa.me/2348000000000" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 px-6 py-3 text-sm mb-8" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "#25D366", color: "#fff" }}><MessageCircle size={16} /> Chat on WhatsApp</a>
+              <a href="https://wa.me/2348000000000" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 px-6 py-3 text-sm mb-8" style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 600, background: "#25D366", color: "#fff" }}><FaWhatsapp size={18} /> Chat on WhatsApp</a>
               <div className="w-full h-64 overflow-hidden" style={{ background: dark ? "#171717" : "#FFFFFF", border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(23,23,23,0.10)"}` }}>
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1014756.9317317619!2d2.8772983577518967!3d6.535035912837754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf2bae227550d%3A0xe771ad7f1bbe89d6!2sLagos!5e0!3m2!1sen!2sng!4v1785157340701!5m2!1sen!2sng"
@@ -1441,11 +1429,21 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    PRELOAD_IMAGES.forEach((src) => { const img = new Image(); img.src = src; });
+    let timer;
+    const run = () => {
+      timer = setTimeout(() => {
+        PRELOAD_IMAGES.forEach((src) => { const img = new Image(); img.src = src; });
+      }, 1200);
+    };
+    if (document.readyState === "complete") run();
+    else window.addEventListener("load", run, { once: true });
+    return () => { clearTimeout(timer); window.removeEventListener("load", run); };
   }, []);
 
   return (
     <div style={{ background: dark ? "#F7F6F2" : "#FFFFFF", minHeight: "100vh" }}>
+      <link rel="preconnect" href="https://unsplash.com" />
+      <link rel="preconnect" href="https://images.unsplash.com" />
       <link rel="preload" as="image" href={HOME_HERO} fetchPriority="high" />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
@@ -1486,6 +1484,10 @@ export default function App() {
 
         .nx-grid { --mx: 50%; --my: 50%; background-image: linear-gradient(rgba(255,255,255,0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.55) 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: radial-gradient(circle 260px at var(--mx) var(--my), #000, transparent); mask-image: radial-gradient(circle 260px at var(--mx) var(--my), #000, transparent); }
 
+        .nx-tower { right: 2%; top: 11%; transform: scale(0.5); transform-origin: top right; }
+        @media (min-width: 640px) { .nx-tower { right: 4%; top: 12%; transform: scale(0.8); } }
+        @media (min-width: 1024px) { .nx-tower { right: 5%; top: 14%; transform: scale(1.2); } }
+
         .nx-spin { transform: rotateX(-18deg) rotateY(30deg); animation: nx-spin 48s linear infinite; }
         @keyframes nx-spin { from { transform: rotateX(-18deg) rotateY(0deg); } to { transform: rotateX(-18deg) rotateY(360deg); } }
 
@@ -1495,8 +1497,6 @@ export default function App() {
 
         .nx-outline { color: transparent; -webkit-text-stroke: 1.5px #171717; transition: color 0.4s ease, -webkit-text-stroke-color 0.4s ease; }
         .nx-outline:hover { color: #B56A35; -webkit-text-stroke-color: #B56A35; }
-
-        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .nx-reveal-img { clip-path: none; transform: none; } }
       `}</style>
 
       <ScrollProgress />
