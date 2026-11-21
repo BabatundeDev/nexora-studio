@@ -1,39 +1,46 @@
 # Nexora Studio
 
-Nexora Studio is a fictional architecture and interior design portfolio website built with React and Vite. The project preserves the original premium visual language while presenting a polished brand concept for a modern architecture studio.
+Nexora Studio is a concept architecture and interior design website built to feel like a real studio, not a template. It features a rotating 3D wireframe tower built in pure CSS, an architect crosshair cursor with live coordinates, and cinematic image reveals. Everything is hand coded in React and Tailwind CSS with zero animation libraries.
 
-## Overview
+Live site: https://nexorastudio-web.vercel.app/
 
-This project transforms an existing architecture website into a portfolio-style experience for Nexora Studio, showcasing:
+## Highlights
 
-- Architectural design and planning services
-- Premium residential and commercial project concepts
-- A refined contact experience with embedded location mapping
-- Responsive sections with smooth motion and polished UI details
+* Rotating 3D wireframe tower built with CSS 3D transforms, sized for phones, tablets, and desktops
+* Architect crosshair cursor with live X and Y coordinates and a trailing ring that expands on interactive elements
+* Parallax hero with a slow cinematic zoom, scroll triggered reveals, and clip path image wipes
+* Outlined text marquee, 3D tilt on project cards, and magnetic pull on call to action buttons
+* Scroll progress bar, animated counters, and smooth page transitions
+* Interactive before and after renovation slider
+* Filterable services and projects, plus an eight stage process timeline
+* Contact page with a project enquiry form, FAQ accordion, embedded Google Map, and WhatsApp chat
+* Performance tuned loading with preconnect, hero image preload, deferred loading of other page images, and fallbacks so content never stays hidden
+* Consistent behavior on iPhone and Android
 
-## Features
+## Pages
 
-- Premium one-page architecture portfolio experience
-- Responsive layout for desktop, tablet, and mobile
-- Animated reveal transitions and interactive project presentation
-- Professional services, about, projects, testimonials, and contact sections
-- Updated SEO metadata and branding for Nexora Studio
-- Embedded map experience in the contact area
+* Home: hero, marquee, about preview, services, why choose us, selected work, process, stats, testimonials, partners, and call to action
+* About: story, mission, vision, values, team, and process
+* Services: ten services with filtering, benefits, timelines, and deliverables
+* Projects: filterable portfolio with the before and after slider
+* Contact: enquiry form, business details, map, and FAQ
 
 ## Tech Stack
 
-- React
-- Vite
-- Tailwind CSS
-- Framer Motion-style reveal transitions via custom animation hooks
-- Lucide React icons
+* React
+* Vite
+* Tailwind CSS
+* CSS 3D transforms and keyframe animations
+* Custom React hooks built on IntersectionObserver and requestAnimationFrame
+* Lucide React and React Icons
+* Deployed on Vercel
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18 or newer
-- npm 9 or newer
+* Node.js 18 or newer
+* npm 9 or newer
 
 ### Installation
 
@@ -56,15 +63,14 @@ npm run build
 
 ## Project Scripts
 
-- `npm run dev` — start the local development server
-- `npm run build` — create a production build
-- `npm run preview` — preview the production build locally
-```
+* `npm run dev`: start the local development server
+* `npm run build`: create a production build
+* `npm run preview`: preview the production build locally
 
 ## Brand Notes
 
-Nexora Studio is a fictional brand created for frontend demonstration and portfolio purposes. The experience is designed to feel premium, modern, and production-ready while remaining fully responsive.
+Nexora Studio is a fictional brand created for frontend demonstration and portfolio purposes. Building photography comes from Unsplash.
 
 ## Contact
 
-For inquiries about the project or implementation details, contact the project maintainer through the repository or the website contact section.
+For questions about the project or implementation details, reach out through the repository or the website contact page.
